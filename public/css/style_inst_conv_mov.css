@@ -1,0 +1,72 @@
+.abs-center {
+    padding: 0%;
+    margin: 0%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+body {
+    background-image: url("../images/background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+form {
+    background-color: rgb(250, 250, 250);
+    border: #C3D730;
+}
+
+.form-inst {
+    width: 550px;
+}
+
+.form-conv-nac {
+    width: 550px;
+}
+
+.form-conv-int {
+    width: 550px;
+}
+
+.btn_1 {
+    background-color: #C3D730;
+    border: #C3D730;
+    color: white;
+}
+
+.btn_1:hover,
+.btn_1:focus,
+.btn_1:active,
+.btn_1.active,
+.open .dropdown-toggle.btn_1 {
+    background-color: #C3D730;
+    border: #C3D730;
+    color: white;
+}
+
+.btn_2 {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn_2:hover,
+.btn_2:focus,
+.btn_2:active,
+.btn_2.active,
+.open .dropdown-toggle.btn_2 {
+    background-color: #dc3545;
+    color: white;
+}
+
+.titles {
+    background: #A1CB21;
+    color: #fff;
+}
+
+
+
+.ulfiles {
+    list-style-type: none;
+}

@@ -1,0 +1,36 @@
+.abs-center-act {
+    padding: 0%;
+    margin: 0%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+form {
+    width: 400px;
+    background-color: rgb(250, 250, 250);
+    border: #C3D730;
+}
+
+.btn1 {
+    width: 100%;
+    background-color: #C3D730;
+    border: #C3D730;
+    color: white;
+}
+
+.btn1:hover,
+.btn1:focus,
+.btn1:active,
+.btn1.active,
+.open .dropdown-toggle.btn1 {
+    background-color: #C3D730;
+    border: #C3D730;
+    color: white;
+}
+
+.titles {
+    background: #A1CB21;
+    color: #fff;
+}
