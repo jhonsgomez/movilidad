@@ -75,7 +75,7 @@
         </div>
         <div class="row mt-4">
             <div class="col offset-1">
-                <label for="" class="mb-1">* Descripcion del empleado:</label>
+                <label for="" class="mb-1">* Descripcion de persona:</label>
                 <input type="text" placeholder="(Ejemplo: Director de la ori... etc)" name="descripcion_tipo_empleado" id="descripcion_tipo_empleado" class="w-md-auto w-100 form-control border border-dark" value="{{ old('descripcion_tipo_empleado') }}">
                 @error('descripcion_tipo_empleado')
                     <span class="text-danger">*{{ $message }}</span>    
@@ -96,7 +96,7 @@
                 <select class="form-select border-dark" name="inst_ent_nacs" id="inst_ent_nacs">
                     <option value="" selected>-- Institución --</option>
                     @foreach ($instituciones as $institucion)
-                        <option value="{{ $institucion->id }}" {{ old('inst_ent_nac') == $institucion->id ? 'selected': '' }}>{{ $institucion->nombre }}</option>
+                        <option value="{{ $institucion->id }}" {{ old('inst_ent_nac') == $institucion->id ? 'selected': '' }}>{{ strtoupper($institucion->nombre) }}</option>
                     @endforeach
                 </select>
                 @error('inst_ent_nacs')
@@ -106,7 +106,7 @@
                 <select class="form-select border-dark" name="inst_ent_ints" id="inst_ent_ints">
                     <option value="" selected>-- Institución --</option>
                     @foreach ($instituciones as $institucion)
-                        <option value="{{ $institucion->id }}" {{ old('inst_ent_int') == $institucion->id ? 'selected': '' }}>{{ $institucion->nombre }}</option>
+                        <option value="{{ $institucion->id }}" {{ old('inst_ent_int') == $institucion->id ? 'selected': '' }}>{{ strtoupper($institucion->nombre) }}</option>
                     @endforeach
                 </select>
                 @error('inst_ent_ints')

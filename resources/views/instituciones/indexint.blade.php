@@ -24,7 +24,7 @@
                                 <th scope="col" class="text-center">Representante</th>
                                 <th scope="col">Telefono</th>
                                 <th scope="col">Email:</th>
-                                @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 3 || auth()->user()->rol_id == 6)
+                                @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
                                     <th scope="col">Acciones:</th>
                                 @endif
                             </tr>
@@ -41,7 +41,7 @@
                                     <td> {{ ucwords(strtolower($item->representante)) }} </td>
                                     <td> {{ $item->telefono }} </td>
                                     <td> {{ strtolower($item->email) }} </td>
-                                    @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 3 || auth()->user()->rol_id == 6)
+                                    @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
                                         <td>
                                             <div class="row">
                                                 <div class="w-auto">
@@ -68,38 +68,40 @@
         <div class="offset-1 col-2">
             <a href="{{ route('login.activites') }}" class="btn btn-outline-success text-decoration-none">Regresar</a>
         </div>
-        <div class="offset-5 col-3">
-            <button type="button" class="btn btn-outline-dark w-100" data-toggle="modal" data-target="#exampleModalCenter">Generar Reportes  <i class="bi bi-file-earmark-spreadsheet-fill"></i></button>
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Reportes</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="{{ route('instEntInt.export') }}" >
-                            <div class="form-group mb-2">
-                                <label for="desde">Desde:</label>
-                                <input type="date" class="form-control" name="instInt_initialDate" id="instInt_initialDate">
+        @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
+            <div class="offset-5 col-3">
+                <button type="button" class="btn btn-outline-dark w-100" data-toggle="modal" data-target="#exampleModalCenter">Generar Reportes  <i class="bi bi-file-earmark-spreadsheet-fill"></i></button>
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Reportes</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                            <div class="form-group mb-2">
-                                <label for="desde">Hasta:</label>
-                                <input type="date" class="form-control" name="instInt_finalDate" id="instInt_finalDate" >
+                            <div class="modal-body">
+                                <form action="{{ route('instEntInt.export') }}" >
+                                <div class="form-group mb-2">
+                                    <label for="desde">Desde:</label>
+                                    <input type="date" class="form-control" name="instInt_initialDate" id="instInt_initialDate">
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label for="desde">Hasta:</label>
+                                    <input type="date" class="form-control" name="instInt_finalDate" id="instInt_finalDate" >
+                                </div>
+                                <span><b>Nota*:</b>Puede seleccionar 1 (Desde), ambas o ninguna fecha.</span>
                             </div>
-                            <span><b>Nota*:</b>Puede seleccionar 1 (Desde), ambas o ninguna fecha.</span>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-outline-success">Descargar</button>
-                                </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-outline-success">Descargar</button>
+                                    </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
 @endsection

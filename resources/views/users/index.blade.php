@@ -17,9 +17,8 @@
                         <table id="queryTable">
                             <thead>
                                 <tr>
+                                    <th scope="col">Documento</th>
                                     <th scope="col">Nombre</th>
-                                    <th scope="col">Apellido</th>
-                                    <th scope="col">Correo</th>
                                     <th scope="col">Rol</th>
                                     <th scope="col">Acciones</th>
                                 </tr>
@@ -27,10 +26,9 @@
                             <tbody>
                                 @foreach ($users as $item)
                                     <tr>
-                                        <td> {{ $item->first_name }} {{ $item->second_name }} </td>
-                                        <td> {{ $item->last_name }} </td>
-                                        <td> {{ $item->email }} </td>
-                                        <td> {{ $item->rol_codigo }} </td>
+                                        <td> {{ $item->documento }} </td>
+                                        <td> {{ strtoupper($item->first_name) }} {{ strtoupper($item->second_name) }} {{ strtoupper($item->last_name) }}</td>
+                                        <td> {{ strtoupper($item->rol_codigo) }} </td>
                                         <td>
                                             <div class="row">
                                                 <div class="offset-1 col-7 me-0">

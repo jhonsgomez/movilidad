@@ -2,10 +2,14 @@
 
 use App\Http\Controllers\ConvenioIntController;
 use App\Http\Controllers\ConvenioNacController;
+use App\Http\Controllers\ConvenioUsuariosController;
+use App\Http\Controllers\AsistentesActividadesController;
 use App\Http\Controllers\InstEntIntController;
 use App\Http\Controllers\InstEntNacController;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+
 use App\Http\Controllers\MovilidadIntEntController;
 use App\Http\Controllers\MovilidadIntSalController;
 use App\Http\Controllers\MovilidadNacEntController;
@@ -102,7 +106,42 @@ Route::get('/activities/cons_convenios_nac', [ConvenioNacController::class, 'ind
     ->name('convenios.show_nac')->middleware('auth');
 
 
+Route::post('/activities/usuarios_convenio_save', [ConvenioUsuariosController::class, 'store'])
+    ->name('convenios.add_user_convenio')->middleware('auth');
 
+Route::put('/activities/usuarios_convenio_update', [ConvenioUsuariosController::class, 'update'])
+    ->name('convenios.update_user_convenio')->middleware('auth');
+
+Route::post('/activities/usuarios_convenio_destroy', [ConvenioUsuariosController::class, 'destroy'])
+    ->name('convenios.destroy_user_convenio')->middleware('auth');
+
+Route::post('/activities/usuarios_convenio_report_nacs', [ConvenioUsuariosController::class, 'report_nacs'])
+    ->name('convenios.report_user_convenio_nacs')->middleware('auth');   
+
+Route::post('/activities/usuarios_convenio_report_ints', [ConvenioUsuariosController::class, 'report_ints'])
+    ->name('convenios.report_user_convenio_ints')->middleware('auth'); 
+
+
+Route::get('/activities/movilidades/asistentes/{actividad_id}', [AsistentesActividadesController::class, 'index'])
+    ->name('movilidades.get_asistentes')->middleware('auth'); 
+
+Route::post('/activities/movilidades/asistentes/new_one', [AsistentesActividadesController::class, 'store_one'])
+    ->name('movilidades.new_one_asistentes')->middleware('auth'); 
+
+Route::post('/activities/movilidades/asistentes/new_many', [AsistentesActividadesController::class, 'store_many'])
+    ->name('movilidades.new_many_asistentes')->middleware('auth'); 
+
+Route::put('/activities/movilidades/asistentes/update', [AsistentesActividadesController::class, 'update'])
+    ->name('movilidades.update_asistente')->middleware('auth'); 
+
+Route::post('/activities/movilidades/asistentes/delete', [AsistentesActividadesController::class, 'destroy'])
+    ->name('movilidades.delete_asistentes')->middleware('auth');
+    
+Route::post('/activities/movilidades/asistentes/report', [AsistentesActividadesController::class, 'report'])
+    ->name('movilidades.report_asistentes')->middleware('auth'); 
+
+Route::get('/download_asistentes_format/{file}', [AsistentesActividadesController::class, 'download']);
+   
 
 
 // Movilidades

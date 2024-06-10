@@ -29,10 +29,12 @@
                                 <th scope="col">Vigencia:</th>
                                 <th scope="col">Duración:</th>
                                 <th scope="col">Documentación de soporte:</th>
-                                @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 6)
+                                @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
                                     <th scope="col">Acciones:</th>
-                                @endif      
-                                <th scope="col">Actividades</th>                       
+                                @endif   
+                                @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)   
+                                    <th scope="col">Actividades:</th>  
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -68,7 +70,7 @@
                                             <br> - <a href="{{ url('/download_movilidad_nac', $file) }}">{{$file}}</a>
                                     @endforeach
                                 </td>
-                                @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 6 || $item->user_id == auth()->user()->id)
+                                @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
                                     <td>
                                         <div class="row mt-2">
                                             <div class="col d-flex flex-row p-0">
@@ -80,54 +82,53 @@
                                             </div>
                                         </div>
                                     </td>
-                                @else
-                                    <td>No cuenta con los permisos necesarios</td>
                                 @endif
-
-                                <td>
-                                    <div class="row my-2">
-                                        <a href="{{ route('actividades.create', $movilidadConActividades['movilidad']->id) }}" style="margin-left: 0.8rem;" class="w-auto btn btn-primary">Agregar Actividad</a>
-                                    </div>
-                                    @if (count($movilidadConActividades['actividades']) > 0)
-                                    <table class="table-responsive">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" class="text-center">No.</th>
-                                                <th scope="col" class="text-center">Actividad</th>
-                                                <th scope="col" class="text-center">Responsable</th>
-                                                <th scope="col" class="text-center">Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach ($movilidadConActividades['actividades'] as $actividad)
-                                            <tr>
-                                                <td>{{ $actividad->id }}</td>
-                                                <td>{{ $actividad->tipo }}</td>
-                                                <td>{{ strtoupper($actividad->responsable) }}</td>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <a href="{{ route('actividades.details', $actividad->id) }}" class="w-auto btn btn-success">Detalles</a>
+                                @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
+                                    <td>
+                                        <div class="row my-2">
+                                            <a href="{{ route('actividades.create', $movilidadConActividades['movilidad']->id) }}" style="margin-left: 0.8rem;" class="w-auto btn btn-primary">Agregar Actividad</a>
+                                        </div>
+                                        @if (count($movilidadConActividades['actividades']) > 0)
+                                        <table class="table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="text-center">Actividad</th>
+                                                    <th scope="col" class="text-center">Responsable</th>
+                                                    <th scope="col" class="text-center">Documento</th>
+                                                    <th scope="col" class="text-center">Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach ($movilidadConActividades['actividades'] as $actividad)
+                                                <tr>
+                                                    <td>{{ $actividad->tipo }}</td>
+                                                    <td>{{ strtoupper($actividad->responsable) }}</td>
+                                                    <td>{{ $actividad->documento }}</td>
+                                                    <td>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <a href="{{ route('actividades.details', $actividad->id) }}" class="w-auto btn btn-success"><i class="bi bi-eye"></i></a>
+                                                            </div>
+                                                            <div class="col">
+                                                                <a href="{{ route('actividades.edit', $actividad->id) }}" class="w-auto btn btn-primary"><i class="bi bi-pencil-square"></i></a>
+                                                            </div>
+                                                            <div class="col">
+                                                                <form method="POST" action="{{ route('actividades.destroy', $actividad->id) }}">
+                                                                    @csrf
+                                                                    <button class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                                                                </form>
+                                                            </div>
                                                         </div>
-                                                        <div class="col">
-                                                            <a href="{{ route('actividades.edit', $actividad->id) }}" class="w-auto btn btn-primary">Editar</a>
-                                                        </div>
-                                                        <div class="col">
-                                                            <form method="POST" action="{{ route('actividades.destroy', $actividad->id) }}">
-                                                                @csrf
-                                                                <button class="btn btn-danger">Eliminar</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                    @else
-                                        <span>Aún no hay actividades para esta modalidad</span>
-                                    @endif
-                                </td>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                        @else
+                                            <span>Aún no hay actividades para esta modalidad</span>
+                                        @endif
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                         </tbody>
@@ -140,38 +141,40 @@
         <div class="offset-1 col-2">
             <a href="{{ route('login.activites') }}" class="btn btn-outline-success text-decoration-none">Regresar</a>
         </div>
-        <div class="offset-5 col-3">
-            <button type="button" class="btn btn-outline-dark w-100" data-toggle="modal" data-target="#exampleModalCenter">Generar Reportes  <i class="bi bi-file-earmark-spreadsheet-fill"></i></button>
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Reportes</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="{{ route('movilidad_nac.export') }}">
-                            <div class="form-group mb-2">
-                                <label for="desde">Desde:</label>
-                                <input type="date" class="form-control" name="export_fecha_inicial" id="export_fecha_inicial">
+        @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
+            <div class="offset-5 col-3">
+                <button type="button" class="btn btn-outline-dark w-100" data-toggle="modal" data-target="#exampleModalCenter">Generar Reportes  <i class="bi bi-file-earmark-spreadsheet-fill"></i></button>
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Reportes</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                            <div class="form-group mb-2">
-                                <label for="desde">Hasta:</label>
-                                <input type="date" class="form-control" name="export_fecha_final" id="export_fecha_final" >
+                            <div class="modal-body">
+                                <form action="{{ route('movilidad_nac.export') }}">
+                                <div class="form-group mb-2">
+                                    <label for="desde">Desde:</label>
+                                    <input type="date" class="form-control" name="export_fecha_inicial" id="export_fecha_inicial">
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label for="desde">Hasta:</label>
+                                    <input type="date" class="form-control" name="export_fecha_final" id="export_fecha_final" >
+                                </div>
+                                <span><b>Nota*:</b>Puede seleccionar 1 (Desde), ambas o ninguna fecha.</span>
                             </div>
-                            <span><b>Nota*:</b>Puede seleccionar 1 (Desde), ambas o ninguna fecha.</span>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-outline-success">Descargar</button>
-                        </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-outline-success">Descargar</button>
+                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
 @endsection

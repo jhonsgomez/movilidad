@@ -81,23 +81,6 @@
     </div>
     <div class="row mt-4">
         <div class="offset-1 col-10">
-            <label for="" class="mb-1">* N° de usuarios (dejar vacío si no aplica):</label>
-            <input type="number" class="form-control border border-dark" name="conv_nUsuarios" id="conv_nUsuarios" value="{{ $convs->n_usuarios }}">
-            @error('conv_nUsuarios')
-                <span class="text-danger">*{{ $message }}</span>    
-            @enderror
-        </div>
-    </div>
-    <div class="row mt-4">
-        <div class="offset-1 col-10">
-            <input type="text" class="form-control border border-dark" placeholder="* Supervisor..." id="conv_super" name="conv_super" value="{{ ucwords(strtolower($convs->supervisor)) }}">
-            @error('conv_super')
-                <span class="text-danger">*{{ $message }}</span>    
-            @enderror
-        </div>
-    </div>
-    <div class="row mt-4">
-        <div class="offset-1 col-10">
             <select class="form-select border border-dark" name="conv_activo" id="conv_activo">
                 <option selected value="">-- Activo --</option>
                 <option value="Sí" {{ $convs->activo == "Sí" ? "selected": '' }}>Sí</option>

@@ -172,6 +172,11 @@ return [
         'tipo_empleado' => 'Tipo de empleado',
         'descripcion_tipo_empleado' => 'Descripción empleado',
         'representante' => 'Representante',
+        'first_name' => 'Primer Nombre',
+        'last_name' => 'Apellidos',
+        'email' => 'Correo',
+        'password' => 'Contraseña',
+        'rol' => 'Rol',
 
 
         

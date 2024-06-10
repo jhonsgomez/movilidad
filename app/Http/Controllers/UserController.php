@@ -38,9 +38,15 @@ class UserController extends Controller
     public function store(Request $request, User $user)
     {
         $request->validate([
-            'email' => 'unique:users',
+            'documento' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|unique:users',
+            'password' => 'required',
+            'rol' => 'required'
         ]);
 
+        $user->documento = $request->post("documento");
         $user->first_name = $request->post('first_name');
         $user->second_name = $request->post('second_name');
         $user->last_name = $request->post('last_name');
@@ -67,12 +73,20 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'documento' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required',
+            'rol' => 'required'
+        ]);
+
         $user = User::findOrFail($id);
 
+        $user->documento = $request->documento;
         $user->first_name = $request->first_name;
         $user->second_name = $request->second_name;
         $user->last_name = $request->last_name;
-        $user->email = $request->email;
         $user->rol_id = $request->rol;
 
         $user->save();

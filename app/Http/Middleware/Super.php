@@ -16,7 +16,7 @@ class Super
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->rol_id == '6') {
+        if (auth()->user()->rol_id == '2' || auth()->user()->rol_id == '6') {
             return $next($request);
         } else {
             return back();

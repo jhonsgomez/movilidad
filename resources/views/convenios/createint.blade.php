@@ -79,23 +79,21 @@
                 @enderror
             </div>
         </div>
+        
         <div class="row mt-4">
             <div class="offset-1 col-10">
-                <label for="" class="mb-1">* N° de usuarios (dejar en 0 si no aplica):</label>
-                <input type="number" class="form-control border border-dark" name="conv_nUsuarios" id="conv_nUsuarios" value="{{ old('conv_nUsuariosNac') }}">
-                @error('conv_nUsuarios')
+                <div id="userAlert" class="alert alert-success d-none" role="alert">
+                    Usuario agregado exitosamente.
+                </div>
+                <label for="" class="mb-1">N° de usuarios: <span id="n_usuarios">(0)</span></label>
+                <br>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#userModal"><i class="bi bi-person-plus"></i>&nbsp;Agregar Usuarios</button>
+                <input type="hidden" name="usuarios_convenio" id="usuarios_convenio">
+                @error('conv_nUsuariosNac')
                     <span class="text-danger">*{{ $message }}</span>    
                 @enderror
             </div>
-        </div>
-        <div class="row mt-4">
-            <div class="offset-1 col-10">
-                <input type="text" class="form-control border border-dark" placeholder="* Supervisor del convenio (ej: Ing. Juan Peréz)..." id="conv_super" name="conv_super" value="{{ old('conv_super') }}">
-                @error('conv_super')
-                    <span class="text-danger">*{{ $message }}</span>    
-                @enderror
-            </div>
-        </div>
+        </div>    
         
         <div class="row mt-4">
             <div class="offset-1 col-10">
@@ -120,5 +118,108 @@
             </div>
         </div>
     </form>
+    <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userModalLabel">AGREGAR USUARIO AL CONVENIO</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="userForm">
+                        <div class="mb-3">
+                            <label for="doc" class="form-label">* Documento de identidad:</label>
+                            <input type="number" class="form-control" id="doc" placeholder="Documento de identidad..." required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">* Nombre:</label>
+                            <input type="text" class="form-control" id="name" placeholder="Nombre del usuario..." required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="program" class="form-label">* Programa académico:</label>
+                            <select class="form-select" id="program" name="program" required>
+                                <option selected value="">Seleccione un programa</option>
+                                @foreach ($programas as $programa)
+                                    <option value="{{ $programa->id }}">{{ ucfirst(strtolower($programa->nombre)) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="period" class="form-label">* Periodo académico (Número de semestre):</label>
+                            <input type="number" class="form-control" id="period" placeholder="Periodo académico..." required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">* Correo institucional:</label>
+                            <input type="email" class="form-control" id="email" placeholder="Correo institucional..." required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">* Número de teléfono:</label>
+                            <input type="number" class="form-control" id="phone" placeholder="Número de teléfono" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="start_date" class="form-label">* Fecha de inicio:</label>
+                            <input type="date" class="form-control" id="start_date" placeholder="Fecha de inicio" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="end_date" class="form-label">* Fecha de terminación:</label>
+                            <input type="date" class="form-control" id="end_date" placeholder="Fecha de terminación" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="supervisor" class="form-label">* Supervisor:</label>
+                            <input type="text" class="form-control" id="supervisor" placeholder="Supervisor del usuario...">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-success">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let usuarios = [];
+            const userForm = document.getElementById('userForm');
+            const usuariosInput = document.getElementById('usuarios_convenio');
+            const nUsuariosSpan = document.getElementById('n_usuarios');
+            const userAlert = document.getElementById('userAlert');
+
+            usuariosInput.value = JSON.stringify(usuarios);
+
+            userForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                
+                const user = {
+                    documento: document.getElementById('doc').value,
+                    nombre: document.getElementById('name').value,
+                    programa_academico: document.getElementById('program').value,
+                    periodo_academico: document.getElementById('period').value,
+                    correo_institucional: document.getElementById('email').value,
+                    numero_telefono: document.getElementById('phone').value,
+                    fecha_inicio: document.getElementById('start_date').value,
+                    fecha_terminacion: document.getElementById('end_date').value,
+                    supervisor: document.getElementById('supervisor').value
+                };
+
+                usuarios.push(user);
+                usuariosInput.value = JSON.stringify(usuarios);
+
+                nUsuariosSpan.textContent = `(${usuarios.length})`;
+
+                // Mostrar el alert de éxito
+                userAlert.classList.remove('d-none');
+                setTimeout(() => {
+                    userAlert.classList.add('d-none');
+                }, 5000);
+
+                // Reset form and close modal
+                userForm.reset();
+                $('#userModal').modal('hide');
+            });
+        });
+    </script>
 @endif
 @endsection

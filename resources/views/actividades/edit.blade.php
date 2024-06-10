@@ -76,7 +76,7 @@
         </div>
         <div class="row mt-4">
             <div class="col offset-1">
-                <label for="" class="mb-1">* Descripcion del empleado:</label>
+                <label for="" class="mb-1">* Descripcion de persona:</label>
                 <input type="text" placeholder="(Ejemplo: Director de la ori... etc)" name="descripcion_tipo_empleado" id="descripcion_tipo_empleado" class="w-md-auto w-100 form-control border border-dark" value="{{ ucfirst(strtolower($actividad->descripcion_tipo_empleado)) }}">
                 @error('descripcion_tipo_empleado')
                     <span class="text-danger">*{{ $message }}</span>    

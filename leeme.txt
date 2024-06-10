@@ -1,2 +1,0 @@
-user admin: sistemas@correo.uts.edu.co
-pass admin: SistemasUts2022*

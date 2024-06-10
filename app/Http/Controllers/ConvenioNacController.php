@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exports\ConvenioNacExport;
 use App\Models\ConvenioNac;
+use App\Models\ProgramaAcademico;
+use App\Models\ConvenioUsuarios;
 use App\Models\ConvenioInt;
 use App\Models\InstEntNac;
 use Illuminate\Http\Request;
@@ -16,6 +18,8 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+
+use App\Exports\ConvenioAllUsuariosExport;
 
 
 class ConvenioNacController extends Controller
@@ -37,27 +41,51 @@ class ConvenioNacController extends Controller
             ->where('convenio_nacs.estado', '=', 1)
             ->where('convenio_nacs.tipo', '=', $type_convenio)
             ->get();
-        return view('convenios.indexnac', compact('convNacs'));
+
+        $conveniosConUsuarios = [];
+
+        foreach ($convNacs as $convenio) {
+            $usuarios = DB::table('convenio_usuarios')
+                ->join('convenio_nacs', 'convenio_usuarios.convenio_id', '=', 'convenio_nacs.id')
+                ->join('programas_academicos', 'convenio_usuarios.programa_academico', '=', 'programas_academicos.id')
+                ->select('convenio_usuarios.*', 'programas_academicos.nombre AS nombre_programa')
+                ->where('convenio_usuarios.convenio_id', '=', $convenio->id)
+                ->where('convenio_usuarios.nac_int', '=', 0)
+                ->get();
+
+            $conveniosConUsuarios[$convenio->id] = [
+                'convenio' => $convenio,
+                'usuarios' => $usuarios
+            ];
+        }
+
+        $programas = DB::table('programas_academicos')
+            ->select('programas_academicos.*')
+            ->get();
+
+        return view('convenios.indexnac', compact(['conveniosConUsuarios', 'programas']));
     }
 
     public function create()
     {
         $instEntNacs = InstEntNac::where('estado', 1)->get();
-        return view('convenios.createnac', compact('instEntNacs'));
+        $programas = DB::table('programas_academicos')
+            ->select('programas_academicos.*')
+            ->get();
+        return view('convenios.createnac', compact(['instEntNacs', 'programas']));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'conv_fechaInicioNac' => 'required',
-            'conv_tipoNac' => 'required',
-            'conv_superNac' => 'required',
             'con_instEntNac' => 'required',
-            'conv_vigenciaNac' => 'required',
-            'conv_docsoporteNac' => 'required',
+            'conv_tipoNac' => 'required',
             'conv_objetoNac' => 'required',
             'conv_resultNac' => 'required',
-            'conv_nUsuariosNac' => 'required',
+            'conv_fechaInicioNac' => 'required',
+            'conv_vigenciaNac' => 'required',
+            'conv_docsoporteNac' => 'required',
+            'usuarios_convenio' => 'required'
         ]);
 
         $files = [];
@@ -71,7 +99,6 @@ class ConvenioNacController extends Controller
         }
 
         $c_convs = ConvenioNac::get('codigo');
-
         $convNac = new ConvenioNac();
 
         if ($c_convs->isEmpty()) {
@@ -84,33 +111,55 @@ class ConvenioNacController extends Controller
             $convNac->codigo = implode('-', $codigo);
         }
 
-        $convNac->instEntNac_id = $request->post('con_instEntNac');
-        $convNac->tipo = $request->post('conv_tipoNac');
-        $convNac->breve_objeto = $request->post('conv_objetoNac');
-        $convNac->resultados_concretos = $request->post('conv_resultNac');
-        $convNac->fechaInicio = $request->post('conv_fechaInicioNac');
-        $convNac->vigencia = $request->post('conv_vigenciaNac');
-        $convNac->n_usuarios = $request->post('conv_nUsuariosNac');
-        $convNac->supervisor = $request->post('conv_superNac');
-        $convNac->estado = 1;
-        $convNac->es_nacional = 1;
-        $convNac->docSoportes = implode(',', $files);
+        $usuariosJson = $request->post('usuarios_convenio');
+        $usuariosArray = json_decode($usuariosJson, true);
 
-        $convNac->activo = "Sí";
-        $convNac->user_id = auth()->user()->id;
+        if (is_array($usuariosArray)) { 
+            $convNac->instEntNac_id = $request->post('con_instEntNac');
+            $convNac->tipo = $request->post('conv_tipoNac');
+            $convNac->breve_objeto = $request->post('conv_objetoNac');
+            $convNac->resultados_concretos = $request->post('conv_resultNac');
+            $convNac->fechaInicio = $request->post('conv_fechaInicioNac');
+            $convNac->vigencia = $request->post('conv_vigenciaNac');
+            $convNac->estado = 1;
+            $convNac->es_nacional = 1;
+            $convNac->docSoportes = implode(',', $files);
+            $convNac->activo = "Sí";
+            $convNac->n_usuarios = count($usuariosArray);
+            $convNac->user_id = auth()->user()->id;
 
-        $convNac->save();
+            $convNac->save();
 
-        return redirect()->route('login.activites')
+            foreach ($usuariosArray as $usuario) {
+                ConvenioUsuarios::create([
+                    'documento' => $usuario['documento'],
+                    'nombre' => $usuario['nombre'],
+                    'programa_academico' => $usuario['programa_academico'],
+                    'periodo_academico' => $usuario['periodo_academico'],
+                    'correo_institucional' => $usuario['correo_institucional'],
+                    'numero_telefono' => $usuario['numero_telefono'],
+                    'fecha_inicio' => $usuario['fecha_inicio'],
+                    'fecha_terminacion' => $usuario['fecha_terminacion'],
+                    'supervisor' => $usuario['supervisor'],
+                    'nac_int' => 0,
+                    'convenio_id' => $convNac->id
+                ]);
+            }
+        
+            return redirect()
+            ->route('login.activites')
             ->with('success', 'Convenio con código ' . implode("-", $codigo) . ' creado correctamente!');
+        } else {
+            return redirect()
+            ->back()
+            ->withErrors(['usuarios' => 'Error al procesar la lista de usuarios.']);
+        }
     }
-
 
     public function download($file)
     {
         return response()->download(public_path('files/conveniosNac/' . $file));
     }
-
 
     public function edit($conv_id)
     {
@@ -119,19 +168,16 @@ class ConvenioNacController extends Controller
         return view('convenios.editnac', compact(['instEntNacs', 'convs']));
     }
 
-
     public function update(Request $request, $conv_id)
     {
-
         $request->validate([
             'conv_fechaInicioNac' => 'required',
             'conv_tipoNac' => 'required',
-            'conv_superNac' => 'required',
             'con_instEntNac' => 'required',
             'conv_vigenciaNac' => 'required',
             'conv_objetoNac' => 'required',
             'conv_resultNac' => 'required',
-            'conv_nUsuariosNac' => 'required',
+            'conv_activoNac' => 'required'
         ]);
 
         $conv = ConvenioNac::findOrFail($conv_id);
@@ -141,8 +187,6 @@ class ConvenioNacController extends Controller
         $conv->resultados_concretos = $request->conv_resultNac;
         $conv->fechaInicio = $request->conv_fechaInicioNac;
         $conv->vigencia = $request->conv_vigenciaNac;
-        $conv->n_usuarios = $request->conv_nUsuariosNac;
-        $conv->supervisor = $request->conv_superNac;
         $conv->activo = $request->conv_activoNac;
 
         $conv->save();
@@ -151,12 +195,17 @@ class ConvenioNacController extends Controller
             ->with('success', 'Convenio actualizado correctamente!');
     }
 
-
     public function destroy($conv_id)
     {
         $conv = ConvenioNac::findOrFail($conv_id);
         $conv->estado = 0;
         $conv->save();
+
+        DB::table('convenio_usuarios')
+            ->where('convenio_id', '=', $conv_id)
+            ->where('nac_int', '=', 0)
+            ->delete();
+
         return redirect('/activities/cons_convenios_nac')
             ->with('success', 'Convenio con código ' . $conv->codigo . ' eliminado correctamente!');
     }
@@ -185,6 +234,7 @@ class ConvenioNacController extends Controller
                         ->select(
                             DB::raw("CONCAT('NAC-', convenio_nacs.id) AS new_id"),
                             DB::raw('UPPER(inst_ent_nacs.nombre) AS institucion'),
+                            DB::raw('convenio_nacs.tipo AS tipo'),
                             DB::raw('CONCAT(UCASE(LEFT(convenio_nacs.breve_objeto, 1)), LCASE(SUBSTRING(convenio_nacs.breve_objeto, 2))) AS breve_objeto'),
                             DB::raw('CONCAT(UCASE(LEFT(convenio_nacs.resultados_concretos, 1)), LCASE(SUBSTRING(convenio_nacs.resultados_concretos, 2))) AS resultados_concretos'),
                             DB::raw("CONCAT(DATEDIFF(convenio_nacs.vigencia, convenio_nacs.fechaInicio) DIV 365, ' Año(s) ', 
@@ -204,6 +254,7 @@ class ConvenioNacController extends Controller
                         ->select(
                             DB::raw("CONCAT('INT-', convenio_ints.id) AS new_id"),
                             DB::raw('UPPER(inst_ent_ints.nombre) AS institucion'),
+                            DB::raw('convenio_ints.tipo AS tipo'),
                             DB::raw('CONCAT(UCASE(LEFT(convenio_ints.breve_objeto, 1)), LCASE(SUBSTRING(convenio_ints.breve_objeto, 2))) AS breve_objeto'),
                             DB::raw('CONCAT(UCASE(LEFT(convenio_ints.resultados_concretos, 1)), LCASE(SUBSTRING(convenio_ints.resultados_concretos, 2))) AS resultados_concretos'),
                             DB::raw("CONCAT(DATEDIFF(convenio_ints.vigencia, convenio_ints.fechaInicio) DIV 365, ' Año(s) ', 
@@ -225,18 +276,19 @@ class ConvenioNacController extends Controller
             foreach ($datos as $dato) {
                 $sheet->setCellValue('A' . $newRowIndex, $dato->new_id);
                 $sheet->setCellValue('B' . $newRowIndex, $dato->institucion);
-                $sheet->setCellValue('C' . $newRowIndex, $dato->breve_objeto);
-                $sheet->setCellValue('D' . $newRowIndex, $dato->resultados_concretos);
-                $sheet->setCellValue('E' . $newRowIndex, $dato->vigencia);
-                $sheet->setCellValue('F' . $newRowIndex, $dato->activo);
-                $sheet->setCellValue('G' . $newRowIndex, $dato->n_usuarios);
-                $sheet->setCellValue('H' . $newRowIndex, $dato->es_nacional);
+                $sheet->setCellValue('C' . $newRowIndex, $dato->tipo);
+                $sheet->setCellValue('D' . $newRowIndex, $dato->breve_objeto);
+                $sheet->setCellValue('E' . $newRowIndex, $dato->resultados_concretos);
+                $sheet->setCellValue('F' . $newRowIndex, $dato->vigencia);
+                $sheet->setCellValue('G' . $newRowIndex, $dato->activo);
+                $sheet->setCellValue('H' . $newRowIndex, $dato->n_usuarios);
+                $sheet->setCellValue('I' . $newRowIndex, $dato->es_nacional);
 
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->getAlignment()->setWrapText(true);
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->getAlignment()->setWrapText(true);
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->applyFromArray([
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -251,18 +303,19 @@ class ConvenioNacController extends Controller
             foreach ($datos_2 as $dato) {
                 $sheet->setCellValue('A' . $newRowIndex, $dato->new_id);
                 $sheet->setCellValue('B' . $newRowIndex, $dato->institucion);
-                $sheet->setCellValue('C' . $newRowIndex, $dato->breve_objeto);
-                $sheet->setCellValue('D' . $newRowIndex, $dato->resultados_concretos);
-                $sheet->setCellValue('E' . $newRowIndex, $dato->vigencia);
-                $sheet->setCellValue('F' . $newRowIndex, $dato->activo);
-                $sheet->setCellValue('G' . $newRowIndex, $dato->n_usuarios);
-                $sheet->setCellValue('H' . $newRowIndex, $dato->es_nacional);
+                $sheet->setCellValue('C' . $newRowIndex, $dato->tipo);
+                $sheet->setCellValue('D' . $newRowIndex, $dato->breve_objeto);
+                $sheet->setCellValue('E' . $newRowIndex, $dato->resultados_concretos);
+                $sheet->setCellValue('F' . $newRowIndex, $dato->vigencia);
+                $sheet->setCellValue('G' . $newRowIndex, $dato->activo);
+                $sheet->setCellValue('H' . $newRowIndex, $dato->n_usuarios);
+                $sheet->setCellValue('I' . $newRowIndex, $dato->es_nacional);
 
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->getAlignment()->setWrapText(true);
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->getAlignment()->setWrapText(true);
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->applyFromArray([
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -283,12 +336,15 @@ class ConvenioNacController extends Controller
             });
 
             return $response;
+        } else if ($type_reporte == 'Usuarios') {
+            return Excel::download(new ConvenioAllUsuariosExport(), 'UTS - Reporte de Usuarios.xlsx');
         } else {
             $datos = ConvenioNac::query()
                     ->join('inst_ent_nacs', 'convenio_nacs.instEntNac_id', '=', 'inst_ent_nacs.id')
                     ->select(
                         DB::raw("CONCAT('NAC-', convenio_nacs.id) AS new_id"),
                         DB::raw('UPPER(inst_ent_nacs.nombre) AS institucion'),
+                        DB::raw('convenio_nacs.tipo AS tipo'),
                         DB::raw('CONCAT(UCASE(LEFT(convenio_nacs.breve_objeto, 1)), LCASE(SUBSTRING(convenio_nacs.breve_objeto, 2))) AS breve_objeto'),
                         DB::raw('CONCAT(UCASE(LEFT(convenio_nacs.resultados_concretos, 1)), LCASE(SUBSTRING(convenio_nacs.resultados_concretos, 2))) AS resultados_concretos'),
                         DB::raw("CONCAT(DATEDIFF(convenio_nacs.vigencia, convenio_nacs.fechaInicio) DIV 365, ' Año(s) ', 
@@ -309,6 +365,7 @@ class ConvenioNacController extends Controller
                         ->select(
                             DB::raw("CONCAT('INT-', convenio_ints.id) AS new_id"),
                             DB::raw('UPPER(inst_ent_ints.nombre) AS institucion'),
+                            DB::raw('convenio_ints.tipo AS tipo'),
                             DB::raw('CONCAT(UCASE(LEFT(convenio_ints.breve_objeto, 1)), LCASE(SUBSTRING(convenio_ints.breve_objeto, 2))) AS breve_objeto'),
                             DB::raw('CONCAT(UCASE(LEFT(convenio_ints.resultados_concretos, 1)), LCASE(SUBSTRING(convenio_ints.resultados_concretos, 2))) AS resultados_concretos'),
                             DB::raw("CONCAT(DATEDIFF(convenio_ints.vigencia, convenio_ints.fechaInicio) DIV 365, ' Año(s) ', 
@@ -331,18 +388,19 @@ class ConvenioNacController extends Controller
             foreach ($datos as $dato) {
                 $sheet->setCellValue('A' . $newRowIndex, $dato->new_id);
                 $sheet->setCellValue('B' . $newRowIndex, $dato->institucion);
-                $sheet->setCellValue('C' . $newRowIndex, $dato->breve_objeto);
-                $sheet->setCellValue('D' . $newRowIndex, $dato->resultados_concretos);
-                $sheet->setCellValue('E' . $newRowIndex, $dato->vigencia);
-                $sheet->setCellValue('F' . $newRowIndex, $dato->activo);
-                $sheet->setCellValue('G' . $newRowIndex, $dato->n_usuarios);
-                $sheet->setCellValue('H' . $newRowIndex, $dato->es_nacional);
+                $sheet->setCellValue('C' . $newRowIndex, $dato->tipo);
+                $sheet->setCellValue('D' . $newRowIndex, $dato->breve_objeto);
+                $sheet->setCellValue('E' . $newRowIndex, $dato->resultados_concretos);
+                $sheet->setCellValue('F' . $newRowIndex, $dato->vigencia);
+                $sheet->setCellValue('G' . $newRowIndex, $dato->activo);
+                $sheet->setCellValue('H' . $newRowIndex, $dato->n_usuarios);
+                $sheet->setCellValue('I' . $newRowIndex, $dato->es_nacional);
 
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->getAlignment()->setWrapText(true);
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->getAlignment()->setWrapText(true);
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->applyFromArray([
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -357,18 +415,19 @@ class ConvenioNacController extends Controller
             foreach ($datos_2 as $dato) {
                 $sheet->setCellValue('A' . $newRowIndex, $dato->new_id);
                 $sheet->setCellValue('B' . $newRowIndex, $dato->institucion);
-                $sheet->setCellValue('C' . $newRowIndex, $dato->breve_objeto);
-                $sheet->setCellValue('D' . $newRowIndex, $dato->resultados_concretos);
-                $sheet->setCellValue('E' . $newRowIndex, $dato->vigencia);
-                $sheet->setCellValue('F' . $newRowIndex, $dato->activo);
-                $sheet->setCellValue('G' . $newRowIndex, $dato->n_usuarios);
-                $sheet->setCellValue('H' . $newRowIndex, $dato->es_nacional);
+                $sheet->setCellValue('C' . $newRowIndex, $dato->tipo);
+                $sheet->setCellValue('D' . $newRowIndex, $dato->breve_objeto);
+                $sheet->setCellValue('E' . $newRowIndex, $dato->resultados_concretos);
+                $sheet->setCellValue('F' . $newRowIndex, $dato->vigencia);
+                $sheet->setCellValue('G' . $newRowIndex, $dato->activo);
+                $sheet->setCellValue('H' . $newRowIndex, $dato->n_usuarios);
+                $sheet->setCellValue('I' . $newRowIndex, $dato->es_nacional);
 
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->getAlignment()->setWrapText(true);
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->getAlignment()->setWrapText(true);
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
-                $sheet->getStyle('A' . $newRowIndex . ':H' . $newRowIndex)->applyFromArray([
+                $sheet->getStyle('A' . $newRowIndex . ':I' . $newRowIndex)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,

@@ -21,7 +21,7 @@
             @if (auth()->check())
             <div class="row justify-content-between align-items-center nav-bar">
                 <div class="col-md-2 col-6 mx-md-4 mx-0">
-                    @if (auth()->user()->rol_id == '6')
+                    @if (auth()->user()->rol_id == '2' || auth()->user()->rol_id == '6')
                         <a href="{{ route('users.index') }}" class="btn me-5 pt-1 pb-1 ps-3 pe-3"><i class="bi bi-people-fill"></i>&nbsp;Gestor de Usuarios</a>
                     @endif
                 </div>
