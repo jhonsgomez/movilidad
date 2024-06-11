@@ -90,6 +90,34 @@
                 @enderror
             </div>
         </div>
+        <div class="row mt-4">
+        @php
+            $texto = $actividad->duracion;
+            $partes = explode(' ', $texto);
+            $duracion = $partes[0];
+            $type_duracion = $partes[1];
+        @endphp
+            <div class="col offset-1">
+                <label for="" class="mb-1">* Duración Actividad:</label>
+                <input type="number" placeholder="Número de horas, dias, semanas, meses etc" name="duracion" id="duracion" class="w-md-auto w-100 form-control border border-dark" value="{{ $duracion }}">
+                @error('duracion')
+                    <span class="text-danger">*{{ $message }}</span>    
+                @enderror
+            </div>
+            <div class="col offset-md-0 offset-1" style="margin-right: 8% !important; margin-left: 1.5% !important;">
+                <label for="" class="mb-1">Tipo de duración: </label>
+                <select name="type_duracion" class="form-select border-dark" id="type_duracion" required>
+                    <option value="" selected>-- * Tipo de duración --</option>
+                    <option value="Horas" {{ $type_duracion == "Horas" ? 'selected': '' }}>Horas</option>
+                    <option value="Dias" {{ $type_duracion == "Dias" ? 'selected': '' }}>Días</option>
+                    <option value="Semanas" {{ $type_duracion == "Semanas" ? 'selected': '' }}>Semanas</option>
+                    <option value="Meses" {{ $type_duracion == "Meses" ? 'selected': '' }}>Meses</option>
+                </select>
+                @error('type_duracion')
+                    <span class="text-danger">*{{ $message }}</span>    
+                @enderror
+            </div>
+        </div>
         <div class="row my-4">
             <div class="col offset-1 col-10">
                 <label for="" class="mb-1">* Institución:</label>

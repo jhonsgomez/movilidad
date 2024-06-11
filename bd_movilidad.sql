@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 10-06-2024 a las 20:15:28
+-- Tiempo de generación: 11-06-2024 a las 22:48:22
 -- Versión del servidor: 8.0.30
 -- Versión de PHP: 8.1.10
 
@@ -36,6 +36,7 @@ CREATE TABLE `actividades` (
   `documento` varchar(20) COLLATE utf8mb3_spanish_ci NOT NULL,
   `tipo_empleado` text COLLATE utf8mb3_spanish_ci NOT NULL,
   `descripcion_tipo_empleado` text COLLATE utf8mb3_spanish_ci NOT NULL,
+  `duracion` varchar(100) COLLATE utf8mb3_spanish_ci NOT NULL,
   `pais` varchar(100) COLLATE utf8mb3_spanish_ci NOT NULL,
   `inst_ent_nacs` bigint UNSIGNED DEFAULT NULL,
   `inst_ent_ints` bigint UNSIGNED DEFAULT NULL,
@@ -47,9 +48,9 @@ CREATE TABLE `actividades` (
 -- Volcado de datos para la tabla `actividades`
 --
 
-INSERT INTO `actividades` (`id`, `tipo`, `descripcion_tipo`, `resultados`, `responsable`, `documento`, `tipo_empleado`, `descripcion_tipo_empleado`, `pais`, `inst_ent_nacs`, `inst_ent_ints`, `doc_soporte`, `movilidad`) VALUES
-(8, 'Clase Espejo', 'Clase espejo', 'Promocion de temas nuevos', 'ANGIE CACERES', '123456789', 'Docente', 'Docente de ingenieria ambiental', 'Colombia', 6, NULL, '', 9),
-(9, 'Webinar', 'Webinar de prueba', 'Aprendizaje nativo', 'NANCY CAROLINA', '123456789', 'Docente', 'Docente de ingenieria ambiental', 'Colombia', NULL, 4, '', 8);
+INSERT INTO `actividades` (`id`, `tipo`, `descripcion_tipo`, `resultados`, `responsable`, `documento`, `tipo_empleado`, `descripcion_tipo_empleado`, `duracion`, `pais`, `inst_ent_nacs`, `inst_ent_ints`, `doc_soporte`, `movilidad`) VALUES
+(8, 'Clase Espejo', 'Clase espejo', 'Promocion de temas nuevos', 'ANGIE CACERES', '123456789', 'Docente', 'Docente de ingenieria ambiental', '2 Meses', 'Colombia', 6, NULL, '', 9),
+(9, 'Webinar', 'Webinar de prueba', 'Aprendizaje nativo', 'NANCY CAROLINA', '123456789', 'Docente', 'Docente de ingenieria ambiental', '1 Dias', 'Colombia', NULL, 4, '', 8);
 
 -- --------------------------------------------------------
 
@@ -62,7 +63,7 @@ CREATE TABLE `actividades_asistentes` (
   `documento` bigint UNSIGNED NOT NULL,
   `nombre` varchar(100) COLLATE utf8mb3_spanish_ci NOT NULL,
   `programa_academico` bigint UNSIGNED NOT NULL,
-  `periodo_academico` int UNSIGNED NOT NULL,
+  `periodo_academico` varchar(100) COLLATE utf8mb3_spanish_ci NOT NULL,
   `correo_institucional` varchar(100) COLLATE utf8mb3_spanish_ci NOT NULL,
   `numero_telefono` bigint DEFAULT NULL,
   `actividad_id` bigint UNSIGNED NOT NULL
@@ -73,10 +74,10 @@ CREATE TABLE `actividades_asistentes` (
 --
 
 INSERT INTO `actividades_asistentes` (`id`, `documento`, `nombre`, `programa_academico`, `periodo_academico`, `correo_institucional`, `numero_telefono`, `actividad_id`) VALUES
-(3, 1006582622, 'ANDRES PABON', 14, 9, 'andrescpabon@uts.edu.co', NULL, 9),
-(11, 1005152835, 'Jhon Gomez', 4, 8, 'jhonsebastiangomez@uts.edu.co', NULL, 9),
-(12, 1007541236, 'Laura Pinzon', 10, 7, 'lpinzon@uts.edu.co', 3124561214, 9),
-(13, 1005152835, 'Jhon Gomez', 4, 8, 'jhonsebastiangomez@uts.edu.co', NULL, 8);
+(3, 1006582622, 'ANDRES PABON', 14, '2021-2', 'andrescpabon@uts.edu.co', NULL, 9),
+(11, 1005152835, 'JHON GOMEZ', 4, '2024-1', 'jhonsebastiangomez@uts.edu.co', NULL, 9),
+(12, 1007541236, 'LAURA PINZON', 10, '2023-1', 'lpinzon@uts.edu.co', 3124561214, 9),
+(13, 1005152835, 'JHON GOMEZ', 4, '2024-1', 'jhonsebastiangomez@uts.edu.co', NULL, 8);
 
 -- --------------------------------------------------------
 
@@ -110,7 +111,8 @@ CREATE TABLE `convenio_ints` (
 INSERT INTO `convenio_ints` (`id`, `codigo`, `fechaInicio`, `tipo`, `breve_objeto`, `activo`, `vigencia`, `docSoportes`, `estado`, `instEntInt_id`, `user_id`, `created_at`, `updated_at`, `resultados_concretos`, `n_usuarios`, `es_nacional`) VALUES
 (3, '310-1000', '2024-05-26', 'Practicas', 'Breve objeto', 'Sí', '2024-06-26', '1716760490_Ejercicio no balanceado.pdf', 1, 5, 1, '2024-05-27 02:54:50', '2024-06-10 19:23:37', 'Resultados', 0, 0),
 (4, '310-1001', '2024-05-27', 'Interadministrativo', 'Breve', 'Sí', '2024-05-30', '1716819874_Ejercicio no balanceado.pdf', 1, 3, 1, '2024-05-27 19:24:34', '2024-05-27 19:25:09', 'Res', 0, 0),
-(6, '310-1002', '2024-06-15', 'Interadministrativo', 'Breve', 'Sí', '2024-06-22', '1717874286_Ejercicio de repaso.pdf', 1, 3, 1, '2024-06-09 00:18:06', '2024-06-09 00:18:06', 'Res', 0, 0);
+(6, '310-1002', '2024-06-15', 'Interadministrativo', 'Breve', 'Sí', '2024-06-22', '1717874286_Ejercicio de repaso.pdf', 1, 3, 1, '2024-06-09 00:18:06', '2024-06-09 00:18:06', 'Res', 0, 0),
+(12, '310-1003', '2024-06-11', 'Especifico', 'Objetivo', 'Sí', '2024-06-12', '1718137477_Ejercicio de repaso.pdf', 1, 3, 1, '2024-06-12 01:24:37', '2024-06-12 01:36:21', 'Resultados', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -142,9 +144,10 @@ CREATE TABLE `convenio_nacs` (
 --
 
 INSERT INTO `convenio_nacs` (`id`, `codigo`, `fechaInicio`, `tipo`, `breve_objeto`, `activo`, `vigencia`, `docSoportes`, `estado`, `instEntNac_id`, `user_id`, `created_at`, `updated_at`, `resultados_concretos`, `n_usuarios`, `es_nacional`) VALUES
-(10, '310-1000', '2024-05-14', 'Marco', 'Celebrar un convenio marco de cooperacion interinstitucional de actividades de investigacion y extension, a travez de proyectos de consultoria y asesoria cientifica con el ctia', 'Sí', '2026-05-13', '1715721228_Doc_Soporte.pdf', 1, 4, 1, '2024-05-15 02:13:48', '2024-06-08 23:22:19', 'Visitas tecnicas con descuento preferencial para los estudiantes de uts\r\nponencia conversatorio de empresarios en el marco de conais', 0, 1),
+(10, '310-1000', '2024-05-14', 'Marco', 'Celebrar un convenio marco de cooperacion interinstitucional de actividades de investigacion y extension, a travez de proyectos de consultoria y asesoria cientifica con el ctia', 'Sí', '2026-05-13', '1715721228_Doc_Soporte.pdf', 1, 4, 1, '2024-05-15 02:13:48', '2024-06-12 01:01:31', 'Visitas tecnicas con descuento preferencial para los estudiantes de uts\r\nponencia conversatorio de empresarios en el marco de conais', 0, 1),
 (11, '310-1001', '2024-05-14', 'Marco', 'Celebrar un convenio marco de cooperacion interinstitucional de actividades de investigacion y extension, a travez de proyectos de consultoria y asesoria cientifica con el ctia', 'Sí', '2026-05-13', '1715721330_Doc_Soporte.pdf', 1, 5, 1, '2024-05-15 02:15:30', '2024-06-10 19:26:38', 'Ponencia en conversatorio de empresarios en el marco de conais', 2, 1),
-(12, '310-1002', '2024-05-27', 'Interadministrativo', 'Breve', 'Sí', '2024-05-30', '1716819773_Ejercicio no balanceado.pdf', 1, 4, 1, '2024-05-27 19:22:53', '2024-05-27 19:22:53', 'Re4s', 0, 1);
+(12, '310-1002', '2024-05-27', 'Interadministrativo', 'Breve', 'Sí', '2024-05-30', '1716819773_Ejercicio no balanceado.pdf', 1, 4, 1, '2024-05-27 19:22:53', '2024-05-27 19:22:53', 'Re4s', 0, 1),
+(20, '310-1003', '2024-06-20', 'Marco', 'hh', 'Sí', '2024-06-27', '1718138310_Ejercicio de repaso.pdf', 1, 6, 1, '2024-06-12 01:38:30', '2024-06-12 01:38:30', 'hhhh', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -157,11 +160,12 @@ CREATE TABLE `convenio_usuarios` (
   `documento` varchar(255) COLLATE utf8mb3_spanish_ci NOT NULL,
   `nombre` varchar(255) COLLATE utf8mb3_spanish_ci NOT NULL,
   `programa_academico` bigint UNSIGNED NOT NULL,
-  `periodo_academico` varchar(255) COLLATE utf8mb3_spanish_ci NOT NULL,
+  `periodo_academico` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish_ci NOT NULL,
   `correo_institucional` varchar(255) COLLATE utf8mb3_spanish_ci NOT NULL,
   `numero_telefono` varchar(20) COLLATE utf8mb3_spanish_ci NOT NULL,
   `fecha_inicio` date NOT NULL,
   `fecha_terminacion` date NOT NULL,
+  `duracion` varchar(100) COLLATE utf8mb3_spanish_ci NOT NULL,
   `supervisor` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_spanish_ci DEFAULT NULL,
   `nac_int` tinyint(1) NOT NULL,
   `convenio_id` bigint UNSIGNED NOT NULL,
@@ -173,10 +177,13 @@ CREATE TABLE `convenio_usuarios` (
 -- Volcado de datos para la tabla `convenio_usuarios`
 --
 
-INSERT INTO `convenio_usuarios` (`id`, `documento`, `nombre`, `programa_academico`, `periodo_academico`, `correo_institucional`, `numero_telefono`, `fecha_inicio`, `fecha_terminacion`, `supervisor`, `nac_int`, `convenio_id`, `created_at`, `updated_at`) VALUES
-(4, '1006582622', 'JHON GOMEZ', 10, '8', 'andrescpabon@uts.edu.co', '3175442169', '2024-06-07', '2024-06-08', NULL, 0, 11, '2024-06-08 05:58:02', '2024-06-10 19:28:23'),
-(7, '1006582622', 'ANDRES PABON', 15, '8', 'andrescpabon@uts.edu.co', '3175448972', '2024-06-08', '2024-06-22', NULL, 0, 17, '2024-06-08 23:26:43', '2024-06-10 19:24:45'),
-(16, '1005472156', 'KEVIN CACERES', 4, '8', 'baldion01@gmail.com', '3145789355', '2024-06-16', '2024-06-18', 'JUAN PEREZ', 0, 11, '2024-06-10 19:26:38', '2024-06-11 01:06:12');
+INSERT INTO `convenio_usuarios` (`id`, `documento`, `nombre`, `programa_academico`, `periodo_academico`, `correo_institucional`, `numero_telefono`, `fecha_inicio`, `fecha_terminacion`, `duracion`, `supervisor`, `nac_int`, `convenio_id`, `created_at`, `updated_at`) VALUES
+(4, '1006582622', 'JHON GOMEZ', 10, '8', 'andrescpabon@uts.edu.co', '3175442169', '2024-06-07', '2024-06-08', '4 Horas', NULL, 0, 11, '2024-06-08 05:58:02', '2024-06-11 19:47:48'),
+(7, '1006582622', 'ANDRES PABON', 15, '8', 'andrescpabon@uts.edu.co', '3175448972', '2024-06-08', '2024-06-22', '4 Horas', NULL, 0, 17, '2024-06-08 23:26:43', '2024-06-11 19:47:54'),
+(16, '1005472156', 'KEVIN CACERES', 4, '8', 'baldion01@gmail.com', '3145789355', '2024-06-16', '2024-06-18', '3 Semanas', 'JUAN PEREZ', 0, 11, '2024-06-10 19:26:38', '2024-06-11 19:48:00'),
+(23, '1005152835', 'Jhon Gomez', 27, '8', 'jhonsebatsiangomez@uts.edu.co', '3175442189', '2024-06-11', '2024-06-12', '2 Meses', NULL, 1, 12, '2024-06-12 01:36:21', '2024-06-12 01:36:21'),
+(24, '1007845623', 'ANA RONDON', 27, '7', 'arondon@uts.edu.co', '3175446871', '2024-06-18', '2024-06-18', '17 Dias', NULL, 0, 20, '2024-06-12 01:38:30', '2024-06-12 01:39:58'),
+(25, '1005152835', 'Jhon Gomz', 29, '9', 'jhonsgomez@uts.edu.co', '317545555', '2024-06-18', '2024-06-18', '1 Horas', '', 0, 20, '2024-06-12 01:38:30', '2024-06-12 01:38:30');
 
 -- --------------------------------------------------------
 
@@ -695,7 +702,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `actividades`
 --
 ALTER TABLE `actividades`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `actividades_asistentes`
@@ -707,19 +714,19 @@ ALTER TABLE `actividades_asistentes`
 -- AUTO_INCREMENT de la tabla `convenio_ints`
 --
 ALTER TABLE `convenio_ints`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `convenio_nacs`
 --
 ALTER TABLE `convenio_nacs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `convenio_usuarios`
 --
 ALTER TABLE `convenio_usuarios`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `failed_jobs`

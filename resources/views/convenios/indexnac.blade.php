@@ -129,6 +129,7 @@
                                                                                 data-contacto="{{ $usuario->numero_telefono }}"
                                                                                 data-inicio="{{ $usuario->fecha_inicio }}"
                                                                                 data-terminacion="{{ $usuario->fecha_terminacion }}"
+                                                                                data-duracion="{{ $usuario->duracion }}"
                                                                                 data-supervisor="{{ strtoupper($usuario->supervisor) }}">
                                                                             <i class="bi bi-eye"></i>
                                                                         </button>
@@ -145,6 +146,7 @@
                                                                                     data-contacto="{{ $usuario->numero_telefono }}"
                                                                                     data-inicio="{{ $usuario->fecha_inicio }}"
                                                                                     data-terminacion="{{ $usuario->fecha_terminacion }}"
+                                                                                    data-duracion="{{ $usuario->duracion }}"
                                                                                     data-supervisor="{{ strtoupper($usuario->supervisor) }}">
                                                                                 <i class="bi bi-pencil-square"></i>
                                                                             </button>
@@ -259,8 +261,8 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="editPeriodo"><strong>Periodo Academico (Número de semestre):</strong></label>
-                        <input type="number" class="form-control" id="periodo_academico" name="periodo_academico" required>
+                        <label for="editPeriodo"><strong>Periodo Academico (Ejemplo: 2024-1):</strong></label>
+                        <input type="text" class="form-control" id="periodo_academico" name="periodo_academico" required>
                     </div>
                     <div class="form-group">
                         <label for="editCorreo"><strong>Correo institucional:</strong></label>
@@ -277,6 +279,23 @@
                     <div class="form-group">
                         <label for="editTerminacion"><strong>Fecha de Terminacion:</strong></label>
                         <input type="date" class="form-control" id="fecha_terminacion" name="fecha_terminacion" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="duracion"><strong>Duración:</strong></label>
+                        <div class="row">
+                            <div class="col">
+                                <input type="number" class="form-control" name="duracion" id="duracion" placeholder="Número de horas, semanas, dias o meses." required>
+                            </div>
+                            <div class="col">
+                                <select name="type_duracion" class="form-select" id="type_duracion" required>
+                                    <option value="" selected>-- * Tipo de duración --</option>
+                                    <option value="Horas">Horas</option>
+                                    <option value="Dias">Días</option>
+                                    <option value="Semanas">Semanas</option>
+                                    <option value="Meses">Meses</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="editSupervisor"><strong>Supervisor:</strong></label>
@@ -310,6 +329,7 @@
                 <p><strong>Contacto:</strong> <span id="modalContacto"></span></p>
                 <p><strong>Fecha de Inicio:</strong> <span id="modalInicio"></span></p>
                 <p><strong>Fecha de Terminacion:</strong> <span id="modalTerminacion"></span></p>
+                <p><strong>Duración:</strong> <span id="modalDuracion"></span></p>
                 <p><strong>Supervisor:</strong> <span id="modalSupervisor"></span></p>
             </div>
             <div class="modal-footer">
@@ -353,8 +373,8 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="editPeriodo"><strong>Periodo Academico:</strong></label>
-                        <input type="number" class="form-control" id="periodo_academico" name="periodo_academico" required>
+                        <label for="editPeriodo"><strong>Periodo Academico (Ejemplo: 2024-1):</strong></label>
+                        <input type="text" class="form-control" id="periodo_academico" name="periodo_academico" required>
                     </div>
                     <div class="form-group">
                         <label for="editCorreo"><strong>Correo institucional:</strong></label>
@@ -371,6 +391,23 @@
                     <div class="form-group">
                         <label for="editTerminacion"><strong>Fecha de Terminacion:</strong></label>
                         <input type="date" class="form-control" id="fecha_terminacion" name="fecha_terminacion" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="duracion"><strong>Duración:</strong></label>
+                        <div class="row">
+                            <div class="col">
+                                <input type="number" class="form-control" name="duracion" id="duracion" placeholder="Número de horas, semanas, dias o meses." required>
+                            </div>
+                            <div class="col">
+                                <select name="type_duracion" class="form-select" id="type_duracion" required>
+                                    <option value="" selected>-- * Tipo de duración --</option>
+                                    <option value="Horas">Horas</option>
+                                    <option value="Dias">Días</option>
+                                    <option value="Semanas">Semanas</option>
+                                    <option value="Meses">Meses</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="editSupervisor"><strong>Supervisor:</strong></label>
@@ -405,6 +442,7 @@
         var contacto = button.data('contacto');
         var inicio = button.data('inicio');
         var terminacion = button.data('terminacion');
+        var duracion = button.data('duracion');
         var supervisor = button.data('supervisor');
 
         var modal = $(this);
@@ -417,6 +455,7 @@
         modal.find('#modalContacto').text(contacto);
         modal.find('#modalInicio').text(inicio);
         modal.find('#modalTerminacion').text(terminacion);
+        modal.find('#modalDuracion').text(duracion);
         modal.find('#modalSupervisor').text(supervisor);
     });
 
@@ -433,7 +472,10 @@
         var numero_telefono = button.data('contacto');
         var fecha_inicio = button.data('inicio');
         var fecha_terminacion = button.data('terminacion');
+        var duracion = button.data('duracion');
         var supervisor = button.data('supervisor');
+
+        const arrayDuracion = duracion.split(" ");
 
         var modal = $(this);
 
@@ -447,6 +489,8 @@
         modal.find('#numero_telefono').val(numero_telefono);
         modal.find('#fecha_inicio').val(fecha_inicio);
         modal.find('#fecha_terminacion').val(fecha_terminacion);
+        modal.find('#duracion').val(arrayDuracion[0]);
+        modal.find('#type_duracion').val(arrayDuracion[1]);
         modal.find('#supervisor').val(supervisor);
     });
 </script>

@@ -35,6 +35,8 @@ class ActividadesController extends Controller
                 'documento' => 'required',
                 'tipo_empleado' => 'required',
                 'descripcion_tipo_empleado' => 'required',
+                'duracion' => 'required',
+                'type_duracion' => 'required',
                 'pais' => 'required',
                 'inst_ent_nacs' => 'required',
                 'movilidad' => 'required',
@@ -48,6 +50,8 @@ class ActividadesController extends Controller
                 'documento' => 'required',
                 'tipo_empleado' => 'required',
                 'descripcion_tipo_empleado' => 'required',
+                'duracion' => 'required',
+                'type_duracion' => 'required',
                 'pais' => 'required',
                 'inst_ent_ints' => 'required',
                 'movilidad' => 'required',
@@ -73,6 +77,7 @@ class ActividadesController extends Controller
         $actividad->documento = $request->post('documento');
         $actividad->tipo_empleado = $request->post('tipo_empleado');
         $actividad->descripcion_tipo_empleado = $request->post('descripcion_tipo_empleado');
+        $actividad->duracion = $request->post('duracion') . " " . $request->post('type_duracion');
         $actividad->pais = $request->post('pais');
         if ($movilidad->nac_ext == 0) $actividad->inst_ent_nacs = $request->post('inst_ent_nacs');
         else $actividad->inst_ent_ints = $request->post('inst_ent_ints');
@@ -124,6 +129,8 @@ class ActividadesController extends Controller
                 'documento' => 'required',
                 'tipo_empleado' => 'required',
                 'descripcion_tipo_empleado' => 'required',
+                'duracion' => 'required',
+                'type_duracion' => 'required',
                 'pais' => 'required',
                 'inst_ent_nacs' => 'required',
                 'movilidad' => 'required',
@@ -137,6 +144,8 @@ class ActividadesController extends Controller
                 'documento' => 'required',
                 'tipo_empleado' => 'required',
                 'descripcion_tipo_empleado' => 'required',
+                'duracion' => 'required',
+                'type_duracion' => 'required',
                 'pais' => 'required',
                 'inst_ent_ints' => 'required',
                 'movilidad' => 'required',
@@ -150,6 +159,7 @@ class ActividadesController extends Controller
         $actividad->documento = $request->documento;
         $actividad->tipo_empleado = $request->tipo_empleado;
         $actividad->descripcion_tipo_empleado = $request->descripcion_tipo_empleado;
+        $actividad->duracion = $request->post('duracion') . " " . $request->post('type_duracion');
         $actividad->pais = $request->pais;
         if ($movilidad->nac_ext == 0) $actividad->inst_ent_nacs = $request->inst_ent_nacs;
         else $actividad->inst_ent_ints = $request->inst_ent_ints;

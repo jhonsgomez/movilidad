@@ -25,6 +25,8 @@ class ConvenioUsuariosController extends Controller
             'numero_telefono' => 'required',
             'fecha_inicio' => 'required',
             'fecha_terminacion' => 'required',
+            'duracion' => 'required',
+            'type_duracion' => 'required',
             'nac_int' => 'required',
             'convenio_id' => 'required'
         ]);
@@ -39,6 +41,7 @@ class ConvenioUsuariosController extends Controller
         $usuario->numero_telefono = $request->post('numero_telefono');
         $usuario->fecha_inicio = $request->post('fecha_inicio');
         $usuario->fecha_terminacion = $request->post('fecha_terminacion');
+        $usuario->duracion = $request->post('duracion') . " " . $request->post('type_duracion');
         $usuario->supervisor = $request->post('supervisor');
         $usuario->nac_int = $request->post('nac_int');
         $usuario->convenio_id = $request->post('convenio_id');
@@ -74,6 +77,8 @@ class ConvenioUsuariosController extends Controller
             'numero_telefono' => 'required',
             'fecha_inicio' => 'required',
             'fecha_terminacion' => 'required',
+            'duracion' => 'required',
+            'type_duracion' => 'required',
             'nac_int' => 'required',
             'convenio_id' => 'required'
         ]);
@@ -88,6 +93,7 @@ class ConvenioUsuariosController extends Controller
         $usuario->numero_telefono = $request->post('numero_telefono');
         $usuario->fecha_inicio = $request->post('fecha_inicio');
         $usuario->fecha_terminacion = $request->post('fecha_terminacion');
+        $usuario->duracion = $request->post('duracion') . " " . $request->post('type_duracion');
         $usuario->supervisor = $request->post('supervisor');
         $usuario->nac_int = $request->post('nac_int');
         $usuario->convenio_id = $request->post('convenio_id');

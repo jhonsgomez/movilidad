@@ -130,6 +130,7 @@ class ConvenioIntController extends Controller
                     'numero_telefono' => $usuario['numero_telefono'],
                     'fecha_inicio' => $usuario['fecha_inicio'],
                     'fecha_terminacion' => $usuario['fecha_terminacion'],
+                    'duracion' => $usuario['duracion'],
                     'supervisor' => $usuario['supervisor'],
                     'nac_int' => 1,
                     'convenio_id' => $conv->id

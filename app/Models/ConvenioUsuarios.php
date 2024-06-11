@@ -18,6 +18,7 @@ class ConvenioUsuarios extends Model
         'numero_telefono',
         'fecha_inicio',
         'fecha_terminacion',
+        'duracion',
         'supervisor',
         'nac_int',
         'convenio_id'

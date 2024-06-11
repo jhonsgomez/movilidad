@@ -38,7 +38,7 @@
                                     <td>{{ $asistente->documento }}</td>
                                     <td>{{ strtoupper($asistente->nombre) }}</td>
                                     <td>{{ ucfirst(strtolower($asistente->nombre_programa)) }}</td>
-                                    <td>Semestre {{ $asistente->periodo_academico }}</td>
+                                    <td>{{ $asistente->periodo_academico }}</td>
                                     <td>{{ strtolower($asistente->correo_institucional) }}</td>
                                     @if ($asistente->numero_telefono != '')
                                         <td>{{ $asistente->numero_telefono }}</td>
@@ -124,8 +124,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="editPeriodo"><strong>Periodo Academico (Número de semestre):</strong></label>
-                            <input type="number" class="form-control" id="periodo_academico" name="periodo_academico" required>
+                            <label for="editPeriodo"><strong>Periodo Academico (Ejemplo: 2024-1):</strong></label>
+                            <input type="text" class="form-control" id="periodo_academico" name="periodo_academico" required>
                         </div>
                         <div class="form-group">
                             <label for="editCorreo"><strong>Correo institucional:</strong></label>
@@ -217,8 +217,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="editPeriodo"><strong>Periodo Academico:</strong></label>
-                            <input type="number" class="form-control" id="periodo_academico" name="periodo_academico" required>
+                            <label for="editPeriodo"><strong>Periodo Academico (Ejemplo: 2024-1):</strong></label>
+                            <input type="text" class="form-control" id="periodo_academico" name="periodo_academico" required>
                         </div>
                         <div class="form-group">
                             <label for="editCorreo"><strong>Correo institucional:</strong></label>

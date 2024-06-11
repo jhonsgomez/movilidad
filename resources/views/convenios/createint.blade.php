@@ -147,8 +147,8 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="period" class="form-label">* Periodo académico (Número de semestre):</label>
-                            <input type="number" class="form-control" id="period" placeholder="Periodo académico..." required>
+                            <label for="period" class="form-label">* Periodo académico (Ejemplo: 2024-1):</label>
+                            <input type="text" class="form-control" id="period" placeholder="Periodo académico..." required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">* Correo institucional:</label>
@@ -165,6 +165,23 @@
                         <div class="mb-3">
                             <label for="end_date" class="form-label">* Fecha de terminación:</label>
                             <input type="date" class="form-control" id="end_date" placeholder="Fecha de terminación" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="duracion" class="form-label">* Duración:</label>
+                            <div class="row">
+                                <div class="col">
+                                    <input type="number" class="form-control" id="duracion" placeholder="Número de horas, semanas, dias o meses." required>
+                                </div>
+                                <div class="col">
+                                    <select name="type_duracion" class="form-select" id="type_duracion" required>
+                                        <option value="" selected>-- * Tipo de duración --</option>
+                                        <option value="Horas">Horas</option>
+                                        <option value="Dias">Días</option>
+                                        <option value="Semanas">Semanas</option>
+                                        <option value="Meses">Meses</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="supervisor" class="form-label">* Supervisor:</label>
@@ -201,6 +218,7 @@
                     numero_telefono: document.getElementById('phone').value,
                     fecha_inicio: document.getElementById('start_date').value,
                     fecha_terminacion: document.getElementById('end_date').value,
+                    duracion: document.getElementById('duracion').value + " " + document.getElementById('type_duracion').value,
                     supervisor: document.getElementById('supervisor').value
                 };
 

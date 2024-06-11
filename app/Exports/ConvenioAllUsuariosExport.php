@@ -25,6 +25,7 @@ class ConvenioAllUsuariosExport implements FromCollection, WithHeadings
                 'convenio_usuarios.numero_telefono',
                 'convenio_usuarios.fecha_inicio',
                 'convenio_usuarios.fecha_terminacion',
+                'convenio_usuarios.duracion',
                 DB::raw('UPPER(convenio_usuarios.supervisor) AS supervisor'),
                 DB::raw('CONCAT(UCASE(LEFT(convenio_nacs.tipo, 1)), LCASE(SUBSTRING(convenio_nacs.tipo, 2))) AS tipo'),
                 DB::raw('UPPER(inst_ent_nacs.nombre) AS convenio')
@@ -45,6 +46,7 @@ class ConvenioAllUsuariosExport implements FromCollection, WithHeadings
                 'convenio_usuarios.numero_telefono',
                 'convenio_usuarios.fecha_inicio',
                 'convenio_usuarios.fecha_terminacion',
+                'convenio_usuarios.duracion',
                 DB::raw('UPPER(convenio_usuarios.supervisor) AS supervisor'),
                 DB::raw('CONCAT(UCASE(LEFT(convenio_ints.tipo, 1)), LCASE(SUBSTRING(convenio_ints.tipo, 2))) AS tipo'),
                 DB::raw('UPPER(inst_ent_ints.nombre) AS convenio')
@@ -67,6 +69,7 @@ class ConvenioAllUsuariosExport implements FromCollection, WithHeadings
             'Número de Teléfono',
             'Fecha de Inicio',
             'Fecha de Terminación',
+            'Duración',
             'Supervisor',
             'Tipo de convenio',
             'Convenio'
