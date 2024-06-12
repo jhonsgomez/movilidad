@@ -2,11 +2,7 @@
 @section('title', 'Convenios Nacionales')
 
 @section('content')
-@if(auth()->user()->rol_id == '1' or auth()->user()->rol_id == "2" || auth()->user()->rol_id == "6")
 <div class="border border-2 rounded-3 shadow-lg bg-white" style="width: 75%;">
-@elseif(auth()->user()->rol_id == "3")
-<div class="border border-2 rounded-3 shadow-lg bg-white" style="width: 75%;">
-@endif
     <div class="row mt-4 p-3 shadow-lg rounded-3 titles">
         <div class="offset-1 col-10">
             <h4 class="text-center" style="text-shadow: 0px 0px 7px #000;">Convenios Nacionales</h4>
@@ -31,12 +27,8 @@
                                 <th scope="col">Resultados Concretos: </th>
                                 <th scope="col">N° de usuarios/No Aplica: </th>
                                 <th scope="col">Documentación Soporte: </th>
-                                @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
-                                    <th scope="col">Acciones: </th>
-                                @endif
-                                @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
+                                <th scope="col">Acciones: </th>
                                 <th scope="col">Usuarios:</th>
-                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -62,7 +54,6 @@
                                             <br> - <a href="{{ url('/download_conv_nac', $file) }}">{{$file}}</a>
                                         @endforeach 
                                     </td>
-                                    @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
                                         <td>
                                             <div class="row">
                                                 <div class="w-auto">
@@ -77,8 +68,6 @@
                                                 </div>
                                             </div>
                                         </td>
-                                    @endif
-                                    @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
                                         <td>
                                             <div class="row">
                                                 <div class="w-auto">
@@ -168,7 +157,6 @@
                                                 </table>
                                             @endif
                                         </td>
-                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>
@@ -181,7 +169,6 @@
         <div class="offset-1 col-2">
             <a href="{{ route('login.activites') }}" class="btn btn-outline-success text-decoration-none">Regresar</a>
         </div>
-        @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
             <div class="offset-5 col-3">
                 <button type="button" class="btn btn-outline-dark w-100" data-toggle="modal" data-target="#exampleModalCenter">Generar Reportes  <i class="bi bi-file-earmark-spreadsheet-fill"></i></button>
                 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -225,7 +212,6 @@
                     </div>
                 </div>
             </div>
-        @endif
     </div>
 </div>
 

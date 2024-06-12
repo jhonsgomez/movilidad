@@ -29,12 +29,8 @@
                                 <th scope="col">Vigencia:</th>
                                 <th scope="col">Duración:</th>
                                 <th scope="col">Documentación de soporte:</th>
-                                @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
-                                    <th scope="col">Acciones:</th>
-                                @endif   
-                                @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)   
-                                    <th scope="col">Actividades:</th>  
-                                @endif
+                                <th scope="col">Acciones:</th>
+                                <th scope="col">Actividades:</th>  
                             </tr>
                         </thead>
                         <tbody>
@@ -70,7 +66,6 @@
                                             <br> - <a href="{{ url('/download_movilidad_nac', $file) }}">{{$file}}</a>
                                     @endforeach
                                 </td>
-                                @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
                                     <td>
                                         <div class="row mt-2">
                                             <div class="col d-flex flex-row p-0">
@@ -82,8 +77,6 @@
                                             </div>
                                         </div>
                                     </td>
-                                @endif
-                                @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
                                     <td>
                                         <div class="row my-2">
                                             <a href="{{ route('actividades.create', $movilidadConActividades['movilidad']->id) }}" style="margin-left: 0.8rem;" class="w-auto btn btn-primary">Agregar Actividad</a>
@@ -128,7 +121,6 @@
                                             <span>Aún no hay actividades para esta modalidad</span>
                                         @endif
                                     </td>
-                                @endif
                             </tr>
                         @endforeach
                         </tbody>
@@ -141,7 +133,6 @@
         <div class="offset-1 col-2">
             <a href="{{ route('login.activites') }}" class="btn btn-outline-success text-decoration-none">Regresar</a>
         </div>
-        @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
             <div class="offset-5 col-3">
                 <button type="button" class="btn btn-outline-dark w-100" data-toggle="modal" data-target="#exampleModalCenter">Generar Reportes  <i class="bi bi-file-earmark-spreadsheet-fill"></i></button>
                 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -174,7 +165,6 @@
                     </div>
                 </div>
             </div>
-        @endif
     </div>
 </div>
 @endsection

@@ -2,12 +2,7 @@
 @section('title', 'Convenios Internacionales')
 
 @section('content')
-@if(auth()->user()->rol_id == '1' or auth()->user()->rol_id == "2" || auth()->user()->rol_id == "6")
 <div class="border border-2 rounded-3 shadow-lg bg-white" style="width: 75%;">
-@elseif(auth()->user()->rol_id == "3")
-<div class="border border-2 rounded-3 shadow-lg bg-white" style="width: 75%;">
-@endif
-    @csrf
     <div class="row mt-4 p-3 shadow-lg rounded-3 titles">
         <div class="offset-1 col-10">
             <h4 class="text-center" style="text-shadow: 0px 0px 7px #000;">Convenios Internacionales</h4>
@@ -32,12 +27,8 @@
                                 <th scope="col">Resultados Concretos: </th>
                                 <th scope="col">N° de usuarios/No Aplica: </th>
                                 <th scope="col">Documentación Soporte: </th>
-                                @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
-                                    <th scope="col">Acciones: </th>
-                                @endif
-                                @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
-                                    <th scope="col">Usuarios:</th>
-                                @endif
+                                <th scope="col">Acciones: </th>
+                                <th scope="col">Usuarios:</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,67 +54,81 @@
                                             <br> - <a href="{{ url('/download_conv_int', $file) }}">{{$file}}</a>
                                         @endforeach 
                                     </td>
-                                    @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
-                                        <td>
-                                            <div class="row">
+                                    <td>
+                                        <div class="row">
+                                            <div class="w-auto">
+                                                <a class="btn btn-primary  w-100" href="{{ route('convenios_int.edit', $item['convenio']->id) }}">Editar</a>
+                                            </div>
+                                            <div class="w-auto">
+                                                <form action="{{ route('convenio_int.destroy', $item['convenio']->id) }}" method="POST" class="form-delete">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-outline-danger w-100">Eliminar</button>
+                                                </form>
+                                            </div>     
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="w-auto">
+                                                <button class="btn my-3 btn-success" data-toggle="modal" data-target="#createUserModal" data-convenio_id="{{ $item['convenio']->id }}">
+                                                    Agregar Usuario
+                                                </button>
+                                            </div>
+                                            @if ($item['convenio']->n_usuarios > 0)
                                                 <div class="w-auto">
-                                                    <a class="btn btn-primary  w-100" href="{{ route('convenios_int.edit', $item['convenio']->id) }}">Editar</a>
-                                                </div>
-                                                <div class="w-auto">
-                                                    <form action="{{ route('convenio_int.destroy', $item['convenio']->id) }}" method="POST" class="form-delete">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-outline-danger w-100">Eliminar</button>
+                                                    <form method="POST" action="{{ route('convenios.report_user_convenio_ints') }}">
+                                                        @csrf  
+                                                        <input type="hidden" name="convenio_id" id="convenio_id" value="{{ $item['convenio']->id }}">
+                                                        <button type="submit" class="btn my-3 btn-primary" >Reporte de usuarios</button>
                                                     </form>
-                                                </div>     
-                                            </div>
-                                        </td>
-                                    @endif
-                                    @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
-                                        <td>
-                                            <div class="row">
-                                                <div class="w-auto">
-                                                    <button class="btn my-3 btn-success" data-toggle="modal" data-target="#createUserModal" data-convenio_id="{{ $item['convenio']->id }}">
-                                                        Agregar Usuario
-                                                    </button>
                                                 </div>
-                                                @if ($item['convenio']->n_usuarios > 0)
-                                                    <div class="w-auto">
-                                                        <form method="POST" action="{{ route('convenios.report_user_convenio_ints') }}">
-                                                            @csrf  
-                                                            <input type="hidden" name="convenio_id" id="convenio_id" value="{{ $item['convenio']->id }}">
-                                                            <button type="submit" class="btn my-3 btn-primary" >Reporte de usuarios</button>
-                                                        </form>
-                                                    </div>
-                                                @endif  
-                                            </div>
+                                            @endif  
+                                        </div>
 
-                                            @if ($item['convenio']->n_usuarios == 0)
-                                                <p>Aún no hay usuarios en el convenio.  </p> 
-                                            @else 
-                                                <table>
-                                                    <thead>
+                                        @if ($item['convenio']->n_usuarios == 0)
+                                            <p>Aún no hay usuarios en el convenio.  </p> 
+                                        @else 
+                                            <table>
+                                                <thead>
+                                                    <tr class="text-center">
+                                                        <th>Documento</th>
+                                                        <th>Nombre</th>
+                                                        <th>Programa</th>
+                                                        <th>Contacto</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($item['usuarios'] as $usuario)
                                                         <tr class="text-center">
-                                                            <th>Documento</th>
-                                                            <th>Nombre</th>
-                                                            <th>Programa</th>
-                                                            <th>Contacto</th>
-                                                            <th>Acciones</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($item['usuarios'] as $usuario)
-                                                            <tr class="text-center">
-                                                                <td> {{ $usuario->documento }} </td>
-                                                                <td> {{ strtoupper($usuario->nombre) }} </td>
-                                                                <td> {{ ucfirst(strtolower($usuario->nombre_programa)) }} </td>
-                                                                <td> {{ $usuario->numero_telefono }} </td>
-                                                                <td> 
-                                                                    <div class="row">
-                                                                        <div class="col">
-                                                                        <button class="w-auto btn btn-success" data-toggle="modal" data-target="#viewUserModal"
+                                                            <td> {{ $usuario->documento }} </td>
+                                                            <td> {{ strtoupper($usuario->nombre) }} </td>
+                                                            <td> {{ ucfirst(strtolower($usuario->nombre_programa)) }} </td>
+                                                            <td> {{ $usuario->numero_telefono }} </td>
+                                                            <td> 
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                    <button class="w-auto btn btn-success" data-toggle="modal" data-target="#viewUserModal"
+                                                                            data-documento="{{ $usuario->documento }}"
+                                                                            data-nombre="{{ strtoupper($usuario->nombre) }}"
+                                                                            data-programa="{{ ucfirst(strtolower($usuario->nombre_programa)) }}"
+                                                                            data-periodo="{{ $usuario->periodo_academico }}"
+                                                                            data-correo="{{ strtolower($usuario->correo_institucional) }}"
+                                                                            data-contacto="{{ $usuario->numero_telefono }}"
+                                                                            data-inicio="{{ $usuario->fecha_inicio }}"
+                                                                            data-terminacion="{{ $usuario->fecha_terminacion }}"
+                                                                            data-duracion="{{ $usuario->duracion }}"
+                                                                            data-supervisor="{{ strtoupper($usuario->supervisor) }}">
+                                                                        <i class="bi bi-eye"></i>
+                                                                    </button>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <button class="w-auto btn btn-primary" data-toggle="modal" data-target="#editUserModal"
+                                                                                data-id="{{ $usuario->id }}"
+                                                                                data-convenio="{{ $usuario->convenio_id }}"
                                                                                 data-documento="{{ $usuario->documento }}"
                                                                                 data-nombre="{{ strtoupper($usuario->nombre) }}"
-                                                                                data-programa="{{ ucfirst(strtolower($usuario->nombre_programa)) }}"
+                                                                                data-programa="{{ ucfirst(strtolower($usuario->programa_academico)) }}"
                                                                                 data-periodo="{{ $usuario->periodo_academico }}"
                                                                                 data-correo="{{ strtolower($usuario->correo_institucional) }}"
                                                                                 data-contacto="{{ $usuario->numero_telefono }}"
@@ -131,44 +136,26 @@
                                                                                 data-terminacion="{{ $usuario->fecha_terminacion }}"
                                                                                 data-duracion="{{ $usuario->duracion }}"
                                                                                 data-supervisor="{{ strtoupper($usuario->supervisor) }}">
-                                                                            <i class="bi bi-eye"></i>
+                                                                            <i class="bi bi-pencil-square"></i>
                                                                         </button>
-                                                                        </div>
-                                                                        <div class="col">
-                                                                            <button class="w-auto btn btn-primary" data-toggle="modal" data-target="#editUserModal"
-                                                                                    data-id="{{ $usuario->id }}"
-                                                                                    data-convenio="{{ $usuario->convenio_id }}"
-                                                                                    data-documento="{{ $usuario->documento }}"
-                                                                                    data-nombre="{{ strtoupper($usuario->nombre) }}"
-                                                                                    data-programa="{{ ucfirst(strtolower($usuario->programa_academico)) }}"
-                                                                                    data-periodo="{{ $usuario->periodo_academico }}"
-                                                                                    data-correo="{{ strtolower($usuario->correo_institucional) }}"
-                                                                                    data-contacto="{{ $usuario->numero_telefono }}"
-                                                                                    data-inicio="{{ $usuario->fecha_inicio }}"
-                                                                                    data-terminacion="{{ $usuario->fecha_terminacion }}"
-                                                                                    data-duracion="{{ $usuario->duracion }}"
-                                                                                    data-supervisor="{{ strtoupper($usuario->supervisor) }}">
-                                                                                <i class="bi bi-pencil-square"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                        <div class="col">
-                                                                            <form method="POST" action="{{ route('convenios.destroy_user_convenio') }}">
-                                                                                @csrf
-                                                                                <input type="hidden" name="user_id" id="user_id" value="{{ $usuario->id }}">
-                                                                                <input type="hidden" name="convenio_id" id="convenio_id" value="{{ $usuario->convenio_id }}">
-                                                                                <input type="hidden" name="nac_int" id="nac_int" value="{{ $usuario->nac_int }}">
-                                                                                <button class="btn btn-danger"><i class="bi bi-trash"></i></button>
-                                                                            </form>
-                                                                        </div>
                                                                     </div>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            @endif
-                                        </td>
-                                    @endif
+                                                                    <div class="col">
+                                                                        <form method="POST" action="{{ route('convenios.destroy_user_convenio') }}">
+                                                                            @csrf
+                                                                            <input type="hidden" name="user_id" id="user_id" value="{{ $usuario->id }}">
+                                                                            <input type="hidden" name="convenio_id" id="convenio_id" value="{{ $usuario->convenio_id }}">
+                                                                            <input type="hidden" name="nac_int" id="nac_int" value="{{ $usuario->nac_int }}">
+                                                                            <button class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -182,7 +169,6 @@
         <div class="offset-1 col-2">
             <a href="{{ route('login.activites') }}" class="btn btn-outline-success text-decoration-none">Regresar</a>
         </div>
-        @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
             <div class="offset-5 col-3">
                 <button type="button" class="btn btn-outline-dark w-100" data-toggle="modal" data-target="#exampleModalCenter">Generar Reportes  <i class="bi bi-file-earmark-spreadsheet-fill"></i></button>
                 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -226,7 +212,6 @@
                     </div>
                 </div>
             </div>
-        @endif
     </div>
 
     <div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserModalLabel" aria-hidden="true">

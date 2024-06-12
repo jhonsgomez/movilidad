@@ -22,7 +22,7 @@ use App\Http\Controllers\MovilidadIntController;
 use App\Http\Controllers\ActividadesController;
 
 // Login Routes
-Route::get('/', [LoginController::class, 'show'])->name('login.index');
+Route::get('/', [LoginController::class, 'show'])->middleware('auth')->name('login.index');
 Route::post('/', [LoginController::class, 'consult'])->name('login.consult');
 Route::get('/logout', [LoginController::class, 'destroy'])->name('login.destroy');
 Route::get('/activities', [LoginController::class, 'activity_view'])->middleware('auth')->name('login.activites');

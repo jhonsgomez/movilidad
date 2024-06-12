@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 11-06-2024 a las 22:48:22
+-- Tiempo de generación: 12-06-2024 a las 20:40:16
 -- Versión del servidor: 8.0.30
 -- Versión de PHP: 8.1.10
 
@@ -78,6 +78,18 @@ INSERT INTO `actividades_asistentes` (`id`, `documento`, `nombre`, `programa_aca
 (11, 1005152835, 'JHON GOMEZ', 4, '2024-1', 'jhonsebastiangomez@uts.edu.co', NULL, 9),
 (12, 1007541236, 'LAURA PINZON', 10, '2023-1', 'lpinzon@uts.edu.co', 3124561214, 9),
 (13, 1005152835, 'JHON GOMEZ', 4, '2024-1', 'jhonsebastiangomez@uts.edu.co', NULL, 8);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `auditoria_sesiones`
+--
+
+CREATE TABLE `auditoria_sesiones` (
+  `id` bigint UNSIGNED NOT NULL,
+  `usuario` varchar(100) COLLATE utf8mb3_spanish_ci NOT NULL,
+  `fecha_hora` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -567,6 +579,12 @@ ALTER TABLE `actividades_asistentes`
   ADD KEY `fk_programa_asistente` (`programa_academico`);
 
 --
+-- Indices de la tabla `auditoria_sesiones`
+--
+ALTER TABLE `auditoria_sesiones`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `convenio_ints`
 --
 ALTER TABLE `convenio_ints`
@@ -708,7 +726,13 @@ ALTER TABLE `actividades`
 -- AUTO_INCREMENT de la tabla `actividades_asistentes`
 --
 ALTER TABLE `actividades_asistentes`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT de la tabla `auditoria_sesiones`
+--
+ALTER TABLE `auditoria_sesiones`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `convenio_ints`

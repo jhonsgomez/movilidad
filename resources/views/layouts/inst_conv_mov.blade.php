@@ -25,7 +25,6 @@
     <link rel="icon" type="image/png" href="{{ asset('images/icon_.png') }}">
 </head>
 
-
 <body>
     <div class="container-fluid b-g">
         <div class="row">

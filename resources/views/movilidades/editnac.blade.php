@@ -2,7 +2,6 @@
 @section('title', 'Editar Movilidad')
 
 @section('content')
-@if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == "2" or auth()->user()->rol_id == "6")
     <form method="POST" class="form-conv-nac border border-2 rounded-3 shadow-lg mt-5 mb-5" action="{{ route('movilidades_nac.update', $movilidad->id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
@@ -129,5 +128,4 @@
             </div>
         </div>
     </form>
-@endif
 @endsection

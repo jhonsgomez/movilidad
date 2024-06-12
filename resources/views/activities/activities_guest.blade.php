@@ -7,12 +7,12 @@
     <img src="{{asset('images/index/header_login.jpg')}}" alt="" class="img-fluid m-0 rounded-top">
     <div class="row mt-4 rounded-3">
         <div class="offset-1 col-10">
-            <h4 class="text-center" id="die">Convenios Activos</h4>
+            <h4 class="text-center" id="die">Convenios Actuales</h4>
         </div>
     </div>
     <div class="row">
         <div class="offset-1 col-10">
-            <span>En esta sección podra consultar los convenios activos en la institución a la fecha.</span>
+            <span>En esta sección podrá consultar los convenios activos en la institución a la fecha.</span>
         </div>
     </div>
     <div class="row mt-4">
@@ -36,11 +36,8 @@
         </div>
     </div>
     <div class="row mt-4 mb-4">
-        <div class="offset-1 col-4">
-            <a href="{{ route('login.index') }}" class="btn btn-outline-danger w-100">Regresar</a>
-        </div>
-        <div class="offset-1 col-5">
-            <button type="submit" class="btn1 btn border border-dark btn-success w-100">Siguiente</button>
+        <div class="col d-flex justify-content-center align-items-center">
+            <button type="submit" class="btn1 w-auto btn text-black border border-dark btn-success w-100">Siguiente</button>
         </div>
     </div>
 </form>

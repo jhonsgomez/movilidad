@@ -2,7 +2,6 @@
 @section('title', 'Registro Instituciones')
 
 @section('content')
-@if (auth()->user()->rol_id == '1' or auth()->user()->rol_id =='2' or auth()->user()->rol_id =='6')
     <form method="POST" action="{{ route('instituciones.store_nac') }}" class="form-inst border border-2 rounded-3 shadow-lg" enctype="multipart/form-data">
         @csrf
         <div class="row mt-3 p-3 shadow-lg rounded-3 titles">
@@ -75,5 +74,4 @@
             </div>
         </div>
     </form>   
-@endif
 @endsection

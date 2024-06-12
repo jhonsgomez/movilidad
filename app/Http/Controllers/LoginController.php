@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cookie;
 
 class LoginController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
-        if (auth()->user()) return redirect()->to('/activities');
-        else return view('auth.login');
+        return redirect()->to('/activities');
     }
 
     public function show_guest()
@@ -33,9 +33,10 @@ class LoginController extends Controller
         }
     }
 
-    public function destroy()
+    public function destroy(Request $request)
     {
         auth()->logout();
+        Cookie::queue(Cookie::forget('user_data'));
         return redirect()->to('/');
     }
 

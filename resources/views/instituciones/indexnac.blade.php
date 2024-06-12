@@ -24,9 +24,7 @@
                                 <th scope="col">Telefono</th>
                                 <th scope="col">Email:</th>
                                 <th scope="col">Documentacion Soporte:</th>
-                                @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
-                                    <th scope="col">Acciones:</th>
-                                @endif
+                                <th scope="col">Acciones:</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,7 +43,6 @@
                                             <br> - <a href="{{ url('/download_ints_nac', $file) }}">{{$file}}</a>
                                         @endforeach 
                                     </td>
-                                    @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
                                         <td>
                                             <div class="row">
                                                 <div class="w-auto">
@@ -59,7 +56,6 @@
                                                 </div>
                                             </div>
                                         </td>
-                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>
@@ -72,7 +68,6 @@
         <div class="offset-1 col-2">
             <a href="{{ route('login.activites') }}" class="btn btn-outline-success text-decoration-none">Regresar</a>
         </div>
-        @if (auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
             <div class="offset-5 col-3">
                 <button type="button" class="btn btn-outline-dark w-100" data-toggle="modal" data-target="#exampleModalCenter">Generar Reportes  <i class="bi bi-file-earmark-spreadsheet-fill"></i></button>
                 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -105,7 +100,6 @@
                     </div>
                 </div>
             </div>
-        @endif
     </div>
 </div>
 @endsection

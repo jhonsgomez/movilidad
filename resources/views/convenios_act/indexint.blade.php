@@ -17,7 +17,6 @@
                             <tr>
                                 <th scope="col">Código</th>
                                 <th scope="col">Fecha de Creación</th>
-                                <th scope="col">Supervisor</th>
                                 <th scope="col">Institución o Entidad</th>
                                 <th scope="col">Pais</th>
                                 <th scope="col">Fecha de Inicio</th>
@@ -35,7 +34,6 @@
                                 <tr>
                                     <td> {{ $item->codigo }}</td>
                                     <td> {{ date_format(date_create($item->created_at), 'd-m-Y') }} </td>
-                                    <td> {{ ucwords(strtolower($item->supervisor)) }} </td>
                                     <td> {{ strtoupper($item->nombre) }} </td>
                                     <td> {{ ucfirst(strtolower($item->pais)) }} </td>
                                     <td> {{ $item->fechaInicio }} </td>

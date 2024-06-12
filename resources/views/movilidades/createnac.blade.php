@@ -2,7 +2,6 @@
 @section('title', 'Registro Movilidades')
 
 @section('content')
-@if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == "2" or auth()->user()->rol_id == "6")
     <form method="POST" class="form-conv-nac border border-2 rounded-3 shadow-lg mt-5 mb-5" action="{{ route('movilidades_nac.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="row mt-3 p-3 shadow-lg rounded-3 titles">
@@ -138,5 +137,4 @@
             </div>
         </div>
     </form>
-@endif
 @endsection

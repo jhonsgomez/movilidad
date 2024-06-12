@@ -2,7 +2,6 @@
 @section('title', 'Registro Instituciones')
 
 @section('content')  
-@if (auth()->user()->rol_id == '1' or auth()->user()->rol_id =='3' or auth()->user()->rol_id =='6')
     <form action="{{ route('instituciones.store_int') }}" method="POST" class="form-inst border border-2 rounded-3 shadow-lg ">
         @csrf
         <div class="row mt-2 p-3 shadow-lg rounded-3 titles">
@@ -70,5 +69,4 @@
             </div>
         </div>
     </form>
-@endif
 @endsection

@@ -7,19 +7,7 @@
         <img src="{{asset('images/index/header_login.jpg')}}" alt="" class="img-fluid m-0 rounded-top">
         <div class="row mt-3">
             <div class="col">
-                @if (auth()->user()->rol_id == '1')
-                    <h4 class="text-center">Coordinador</h4>
-                @elseif(auth()->user()->rol_id=='2')
-                    <h4 class="text-center">Oficina de Relaciones Interinstitucionales</h4>      
-                @elseif(auth()->user()->rol_id=='3')
-                    <h4 class="text-center">Dirección de Investigación y Extensión</h4>
-                @elseif(auth()->user()->rol_id=='4')
-                    <h4 class="text-center">Decanatura</h4>
-                @elseif(auth()->user()->rol_id=='5')
-                    <h4 class="text-center">Bienvenido</h4>
-                @elseif(auth()->user()->rol_id=='6')
-                    <h4 class="text-center">Administrador</h4>
-                @endif
+                <h4 class="text-center text-uppercase">Bienvenido {{ auth()->user()->name }}</h4>
             </div>
         </div>
         <div class="form-row m-4 justify-content-around">
@@ -27,9 +15,7 @@
             <select class="col col-md-8 custom-select" name="actions" id="actions" required>
                 <option selected value="">&nbsp;&nbsp;Seleccione una opción</option>
                 <option value="consultar">&nbsp;&nbsp;Consultar</option>
-                @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 4 || auth()->user()->rol_id == 6)
-                    <option value="registrar">&nbsp;&nbsp;Registrar</option>
-                @endif()
+                <option value="registrar">&nbsp;&nbsp;Registrar</option>
             </select>
         </div>
         <div class="form-row m-4 justify-content-around">

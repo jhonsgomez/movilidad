@@ -21,13 +21,7 @@
             @if (auth()->check())
             <div class="row justify-content-between align-items-center nav-bar">
                 <div class="col-md-2 col-6 mx-md-4 mx-0">
-                    @if (auth()->user()->rol_id == '2' || auth()->user()->rol_id == '6')
-                        <a href="{{ route('users.index') }}" class="btn me-5 pt-1 pb-1 ps-3 pe-3"><i class="bi bi-people-fill"></i>&nbsp;Gestor de Usuarios</a>
-                    @endif
-                </div>
-                <div class="col-md-2 col-6 mx-md-4 mx-0">
-                    <a href="{{route('login.destroy')}}" 
-                    class="btn me-5 pt-1 pb-1 ps-3 pe-3 log-out border border-dark">Cerrar Sesion&nbsp;<i class="bi bi-box-arrow-left"></i></a>
+                    <a href="{{ env('SISTEMAS_URL') }}" class="btn me-5 pt-1 pb-1 ps-3 pe-3"><i class="bi bi-house-door-fill"></i>&nbsp;Regresar</a>
                 </div>
             </div>
             <div class="row">

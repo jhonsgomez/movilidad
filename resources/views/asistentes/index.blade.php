@@ -27,9 +27,7 @@
                                 <th scope="col">Periodo Academico</th>
                                 <th scope="col">Correo Institucional</th>
                                 <th scope="col">Telefono</th>                                
-                                @if (auth()->user()->rol_id == '1' or auth()->user()->rol_id == 2 || auth()->user()->rol_id == 6)
-                                    <th scope="col">Acciones:</th>
-                                @endif                            
+                                <th scope="col">Acciones:</th>                           
                             </tr>
                         </thead>
                         <tbody>
