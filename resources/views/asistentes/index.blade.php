@@ -169,7 +169,7 @@
                         </div>
                         <div class="form-group mt-4 mb-3 pb-2">
                             <label for="editFile"><span class="bg-secondary rounded text-white p-2"><strong>PASO 4:</strong></span>&nbsp;&nbsp;Cargue el archivo ".csv" aquí:</label>
-                            <input type="file" class="form-control mt-4" name="file" id="file" required>
+                            <input type="file" class="form-control mt-4" accept=".csv" name="file" id="file" required>
                         </div>
                         <div class="form-group pb-2">
                             <label for="editFile"><span class="bg-secondary rounded text-white p-2"><strong>PASO 5:</strong></span>&nbsp;&nbsp;Click  en "Registrar Asitencia".</label>
