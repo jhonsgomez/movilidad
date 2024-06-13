@@ -37,7 +37,7 @@ class LoginController extends Controller
     {
         auth()->logout();
         Cookie::queue(Cookie::forget('user_data'));
-        return redirect()->to('/');
+        return redirect()->to(env('SISTEMAS_URL'));
     }
 
     public function activity_view(Request $request)
