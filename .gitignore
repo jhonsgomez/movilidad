@@ -51,8 +51,6 @@ LICENSE_EE*
 RELEASE_NOTES.txt
 .ssh/
 error_log
-.htpasswds
-/.htaccess
 php.ini.sample
 .modgit/
 _vti_bin/
@@ -64,8 +62,6 @@ _vti_txt/
 tmp/
 php.ini
 _old/
-.htpasswds/
-.htpasswd
 .viminfo
 .profile
 .bashrc
@@ -79,6 +75,3 @@ Homestead.json
 .phpunit.result.cache
 #Laravel Specific files
 /vendor
-/public/.htaccess
-/storage
-storage/*.key

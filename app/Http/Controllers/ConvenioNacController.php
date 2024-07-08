@@ -224,7 +224,7 @@ class ConvenioNacController extends Controller
             $to = "9999-12-31";
         }
 
-        $archivoExcel = public_path('files\excel\FormatoConvenios.xlsx');
+        $archivoExcel = public_path('files/excel/FormatoConvenios.xlsx');
         $spreadsheet = IOFactory::load($archivoExcel);
 
         $sheet = $spreadsheet->getActiveSheet();

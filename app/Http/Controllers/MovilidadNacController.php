@@ -173,7 +173,7 @@ class MovilidadNacController extends Controller
             $to = "9999-12-31";
         }
 
-        $archivoExcel = public_path('files\excel\FormatoMovilidades.xlsx');
+        $archivoExcel = public_path('files/excel/FormatoMovilidades.xlsx');
         $spreadsheet = IOFactory::load($archivoExcel);
 
         $sheet = $spreadsheet->getActiveSheet();
