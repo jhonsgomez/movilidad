@@ -1,4 +1,4 @@
-# Proyecto Laravel de Ejemplo
+# Proyecto Movilidad
 
 Este es un proyecto de ejemplo utilizando el framework Laravel. Laravel es un framework PHP moderno y potente que facilita el desarrollo de aplicaciones web con una sintaxis elegante.
 
