@@ -1,5 +1,5 @@
 @extends('layouts.guest')
-@section('title', 'Actividades')
+@section('title', 'ORI UTS - Convenios Internacionales')
 
 @section('act_content')
 <div class="border border-2 rounded-3 shadow-lg mt-5 mb-5" style="width: 70%; background-color: white;">
@@ -37,7 +37,13 @@
                                     <td> {{ strtoupper($item->nombre) }} </td>
                                     <td> {{ ucfirst(strtolower($item->pais)) }} </td>
                                     <td> {{ $item->fechaInicio }} </td>
-                                    <td> {{ $item->vigencia }} </td>
+                                    <td> 
+                                        @if ($item->vigencia != '')
+                                            {{ $item->vigencia }} 
+                                        @else
+                                            {{ __('Renovación automática') }}
+                                        @endif 
+                                    </td>
                                     <td> {{ $item->tipo }} </td>
                                     <td> {{ $item->activo }} </td>
                                     <td> {{ ucfirst(strtolower($item->breve_objeto)) }} </td>
@@ -48,9 +54,13 @@
                                         <td> {{ $item->n_usuarios }} </td>
                                     @endif                            
                                     <td> 
-                                        @foreach (explode(",", $item->docSoportes) as $file)
-                                            <br> - <a href="{{ url('/download_conv_int', $file) }}">{{$file}}</a>
-                                        @endforeach 
+                                        @if ($item->docSoportes != '')
+                                            @foreach (explode(",", $item->docSoportes) as $file)
+                                                <br> - <a href="{{ url('/download_conv_int', $file) }}">{{$file}}</a>
+                                            @endforeach 
+                                        @else
+                                            {{ __('No hay documentación de soporte') }}
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

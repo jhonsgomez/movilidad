@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ConvenioNacExport;
 use App\Models\ConvenioNac;
-use App\Models\ProgramaAcademico;
 use App\Models\ConvenioUsuarios;
 use App\Models\ConvenioInt;
 use App\Models\InstEntNac;
@@ -13,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -24,12 +21,6 @@ use App\Exports\ConvenioAllUsuariosExport;
 
 class ConvenioNacController extends Controller
 {
-    private $convenioNacExport;
-
-    public function __construct(ConvenioNacExport $convenioNacExport)
-    {
-        $this->convenioNacExport = $convenioNacExport;
-    }
     
     public function index(Request $request)
     {
@@ -83,8 +74,6 @@ class ConvenioNacController extends Controller
             'conv_objetoNac' => 'required',
             'conv_resultNac' => 'required',
             'conv_fechaInicioNac' => 'required',
-            'conv_vigenciaNac' => 'required',
-            'conv_docsoporteNac' => 'required',
             'usuarios_convenio' => 'required'
         ]);
 
@@ -124,7 +113,7 @@ class ConvenioNacController extends Controller
             $convNac->estado = 1;
             $convNac->es_nacional = 1;
             $convNac->docSoportes = implode(',', $files);
-            $convNac->activo = "Sí";
+            $convNac->activo = "Si";
             $convNac->n_usuarios = count($usuariosArray);
             $convNac->user_id = auth()->user()->id;
 
@@ -175,7 +164,6 @@ class ConvenioNacController extends Controller
             'conv_fechaInicioNac' => 'required',
             'conv_tipoNac' => 'required',
             'con_instEntNac' => 'required',
-            'conv_vigenciaNac' => 'required',
             'conv_objetoNac' => 'required',
             'conv_resultNac' => 'required',
             'conv_activoNac' => 'required'

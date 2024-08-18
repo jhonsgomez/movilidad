@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ConvenioIntExport;
 use App\Exports\ConvenioAllUsuariosExport;
 use App\Models\ConvenioInt;
 use App\Models\ConvenioUsuarios;
@@ -13,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -71,8 +69,6 @@ class ConvenioIntController extends Controller
             'conv_fechaInicio' => 'required',
             'conv_tipo' => 'required',
             'conv_objeto' => 'required',
-            'conv_vigencia' => 'required',
-            'conv_docsoporte' => 'required',
             'conv_instEntInt' => 'required',
             'conv_result' => 'required',
             'usuarios_convenio' => 'required'
@@ -108,7 +104,7 @@ class ConvenioIntController extends Controller
             $conv->fechaInicio = $request->post('conv_fechaInicio');
             $conv->tipo = $request->post('conv_tipo');
             $conv->breve_objeto = $request->post('conv_objeto');
-            $conv->activo = "Sí";
+            $conv->activo = "Si";
             $conv->vigencia = $request->post('conv_vigencia');
             $conv->docSoportes = implode(',', $files);
             $conv->estado = 1;
@@ -165,7 +161,6 @@ class ConvenioIntController extends Controller
             'conv_fechaInicio' => 'required',
             'conv_tipo' => 'required',
             'conv_instEntInt' => 'required',
-            'conv_vigencia' => 'required',
             'conv_objeto' => 'required',
             'conv_result' => 'required',
             'conv_activo' => 'required'

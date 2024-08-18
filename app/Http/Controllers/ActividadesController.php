@@ -14,7 +14,7 @@ class ActividadesController extends Controller
     public function create($mov_id)
     {
         $movilidad = Movilidad::findOrFail($mov_id);
-        $instituciones;
+        $instituciones = null;
         if ($movilidad->nac_ext == 0) $instituciones = InstEntNac::where('estado', 1)->get();
         else $instituciones = InstEntInt::where('estado', 1)->get();
     
@@ -94,7 +94,7 @@ class ActividadesController extends Controller
     {
         $actividad = Actividad::findOrFail($act_id);
         $movilidad = Movilidad::findOrFail($actividad->movilidad);
-        $instituciones;
+        $instituciones = null;
 
         if ($movilidad->nac_ext == 0) $instituciones = InstEntNac::where('estado', 1)->get();
         else $instituciones = InstEntInt::where('estado', 1)->get();
@@ -106,7 +106,7 @@ class ActividadesController extends Controller
     {
         $actividad = Actividad::findOrFail($act_id);
         $movilidad = Movilidad::findOrFail($actividad->movilidad);
-        $instituciones;
+        $instituciones = null;
 
         if ($movilidad->nac_ext == 0) $instituciones = InstEntNac::where('estado', 1)->get();
         else $instituciones = InstEntInt::where('estado', 1)->get();

@@ -1,5 +1,5 @@
 @extends('layouts.inst_conv_mov')
-@section('title', 'Registro Convenios')
+@section('title', 'ORI UTS - Registro Convenios')
 
 @section('content')
     <form method="POST" class="form-conv-nac border border-2 rounded-3 shadow-lg mt-5 mb-5" action="{{ route('convenios.store_nac') }}" enctype="multipart/form-data">
@@ -71,7 +71,7 @@
         </div>
         <div class="row mt-3">
             <div class="offset-1 col-10">
-                <label for="" class="mb-1">* Fecha de Vigencia:</label>
+                <label for="" class="mb-1">Vigencia (dejar vacío si tiene renovación automatica):</label>
                 <input type="date" class="form-control border border-dark" id="conv_vigenciaNac" name="conv_vigenciaNac" value="{{ old('conv_vigenciaNac') }}">
                 @error('conv_vigenciaNac')
                     <span class="text-danger">*{{ $message }}</span>    
@@ -165,8 +165,8 @@
                             <input type="date" class="form-control" id="start_date" placeholder="Fecha de inicio" required>
                         </div>
                         <div class="mb-3">
-                            <label for="end_date" class="form-label">* Fecha de terminación:</label>
-                            <input type="date" class="form-control" id="end_date" placeholder="Fecha de terminación" required>
+                            <label for="end_date" class="form-label"> * Terminación (dejar vacío si tiene renovación automatica):</label>
+                            <input type="date" class="form-control" id="end_date" placeholder="Fecha de terminación">
                         </div>
                         <div class="mb-3">
                             <label for="duracion" class="form-label">* Duración:</label>

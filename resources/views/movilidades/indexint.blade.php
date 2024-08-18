@@ -67,7 +67,7 @@
                                                 <br> - <a href="{{ url('/download_movilidad_int', $file) }}">{{$file}}</a>
                                         @endforeach
                                     @else
-                                        <span>No hay documentos de soporte</span>
+                                        {{ __('No hay documentación de soporte') }}
                                     @endif
                                 </td>
                                     <td>

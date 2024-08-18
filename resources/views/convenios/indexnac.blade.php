@@ -1,5 +1,5 @@
 @extends('layouts.inst_conv_mov')
-@section('title', 'Convenios Nacionales')
+@section('title', 'ORI UTS - Convenios Nacionales')
 
 @section('content')
 <div class="border border-2 rounded-3 shadow-lg bg-white" style="width: 75%;">
@@ -11,7 +11,7 @@
     <div class="row mt-4">
         <div class="offset-1 col-10">
             <div class="card">
-                <div class="card-body ">
+                <div class="card-body">
                     <table id="queryTable"> 
                         <thead>
                             <tr>
@@ -37,9 +37,21 @@
                                     <td> {{ $item['convenio']->codigo }}</td>
                                     <td> {{ date_format(date_create($item['convenio']->created_at), 'd-m-Y') }} </td>
                                     <td> {{ strtoupper($item['convenio']->nombre) }} </td>
-                                    <td> {{ ucwords(strtolower($item['convenio']->ciudad)) }} </td>
+                                    <td>
+                                        @if ($item['convenio']->ciudad != '')
+                                            {{ ucwords(strtolower($item['convenio']->ciudad)) }}
+                                        @else
+                                            {{ __('N/A') }}
+                                        @endif 
+                                    </td>
                                     <td> {{ $item['convenio']->fechaInicio }} </td>
-                                    <td> {{ $item['convenio']->vigencia }} </td>
+                                    <td> 
+                                        @if ($item['convenio']->vigencia != '')
+                                            {{ $item['convenio']->vigencia }} 
+                                        @else
+                                            {{ __('Renovación automática') }}
+                                        @endif 
+                                    </td>
                                     <td> {{ $item['convenio']->tipo }} </td>
                                     <td> {{ $item['convenio']->activo }} </td>
                                     <td> {{ ucfirst(strtolower($item['convenio']->breve_objeto)) }} </td>
@@ -50,69 +62,90 @@
                                         <td> {{ $item['convenio']->n_usuarios }} </td>
                                     @endif                            
                                     <td> 
-                                        @foreach (explode(",", $item['convenio']->docSoportes) as $file)
-                                            <br> - <a href="{{ url('/download_conv_nac', $file) }}">{{$file}}</a>
-                                        @endforeach 
+                                        @if ($item['convenio']->docSoportes != '')
+                                            @foreach (explode(",", $item['convenio']->docSoportes) as $file)
+                                                <br> - <a href="{{ url('/download_conv_nac', $file) }}">{{$file}}</a>
+                                            @endforeach
+                                        @else
+                                            {{ __('No hay documentación de soporte') }}
+                                        @endif
                                     </td>
-                                        <td>
-                                            <div class="row">
+                                    <td>
+                                        <div class="row">
+                                            <div class="w-auto">
+                                                <a class="btn btn-primary" href="{{ route('convenios_nac.edit', $item['convenio']->id) }}">Editar</a>
+                                            </div>
+                                            <div class="w-auto">
+                                                <form action="{{ route('convenio_nac.destroy', $item['convenio']->id) }}" method="POST" class="form-delete" onsubmit="confirmarEliminacion(event)">
+                                                    @csrf
+                                                        <button type="submit" class="btn btn-outline-danger">Eliminar</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="w-auto">
+                                                <button class="btn my-3 btn-success" data-toggle="modal" data-target="#createUserModal" data-convenio_id="{{ $item['convenio']->id }}">
+                                                    Agregar Usuario
+                                                </button>
+                                            </div>
+                                            @if ($item['convenio']->n_usuarios > 0)
                                                 <div class="w-auto">
-                                                    <a class="btn btn-primary" href="{{ route('convenios_nac.edit', $item['convenio']->id) }}">Editar</a>
-                                                </div>
-                                                <div class="w-auto">
-                                                    <form action="{{ route('convenio_nac.destroy', $item['convenio']->id) }}" method="POST" class="form-delete">
-                                                        @csrf
-                                                            <button type="submit" class="btn btn-outline-danger">Eliminar</button>
-                                                        </div>
+                                                    <form method="POST" action="{{ route('convenios.report_user_convenio_nacs') }}">
+                                                        @csrf  
+                                                        <input type="hidden" name="convenio_id" id="convenio_id" value="{{ $item['convenio']->id }}">
+                                                        <button type="submit" class="btn my-3 btn-primary" >Reporte de usuarios</button>
                                                     </form>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="row">
-                                                <div class="w-auto">
-                                                    <button class="btn my-3 btn-success" data-toggle="modal" data-target="#createUserModal" data-convenio_id="{{ $item['convenio']->id }}">
-                                                        Agregar Usuario
-                                                    </button>
-                                                </div>
-                                                @if ($item['convenio']->n_usuarios > 0)
-                                                    <div class="w-auto">
-                                                        <form method="POST" action="{{ route('convenios.report_user_convenio_nacs') }}">
-                                                            @csrf  
-                                                            <input type="hidden" name="convenio_id" id="convenio_id" value="{{ $item['convenio']->id }}">
-                                                            <button type="submit" class="btn my-3 btn-primary" >Reporte de usuarios</button>
-                                                        </form>
-                                                    </div>
-                                                @endif  
-                                            </div>
+                                            @endif  
+                                        </div>
 
-                                            @if ($item['convenio']->n_usuarios == 0)
-                                                <p>Aún no hay usuarios en el convenio.  </p> 
-                                            @else 
-                                                <table>
-                                                    <thead>
+                                        @if ($item['convenio']->n_usuarios == 0)
+                                            <p>Aún no hay usuarios en el convenio.  </p> 
+                                        @else 
+                                            <table>
+                                                <thead>
+                                                    <tr class="text-center">
+                                                        <th>Documento</th>
+                                                        <th>Nombre</th>
+                                                        <th>Programa</th>
+                                                        <th>Contacto</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($item['usuarios'] as $usuario)
                                                         <tr class="text-center">
-                                                            <th>Documento</th>
-                                                            <th>Nombre</th>
-                                                            <th>Programa</th>
-                                                            <th>Contacto</th>
-                                                            <th>Acciones</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($item['usuarios'] as $usuario)
-                                                            <tr class="text-center">
-                                                                <td> {{ $usuario->documento }} </td>
-                                                                <td> {{ strtoupper($usuario->nombre) }} </td>
-                                                                <td> {{ ucfirst(strtolower($usuario->nombre_programa)) }} </td>
-                                                                <td> {{ $usuario->numero_telefono }} </td>
-                                                                <td> 
-                                                                    <div class="row">
-                                                                        <div class="col">
-                                                                        <button class="w-auto btn btn-success" data-toggle="modal" data-target="#viewUserModal"
+                                                            <td> {{ $usuario->documento }} </td>
+                                                            <td> {{ strtoupper($usuario->nombre) }} </td>
+                                                            <td> {{ ucfirst(strtolower($usuario->nombre_programa)) }} </td>
+                                                            <td> {{ $usuario->numero_telefono }} </td>
+                                                            <td> 
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                    <button class="w-auto btn btn-success" data-toggle="modal" data-target="#viewUserModal"
+                                                                            data-documento="{{ $usuario->documento }}"
+                                                                            data-nombre="{{ strtoupper($usuario->nombre) }}"
+                                                                            data-programa="{{ ucfirst(strtolower($usuario->nombre_programa)) }}"
+                                                                            data-periodo="{{ $usuario->periodo_academico }}"
+                                                                            data-correo="{{ strtolower($usuario->correo_institucional) }}"
+                                                                            data-contacto="{{ $usuario->numero_telefono }}"
+                                                                            data-inicio="{{ $usuario->fecha_inicio }}"
+                                                                            data-terminacion="{{ $usuario->fecha_terminacion }}"
+                                                                            data-duracion="{{ $usuario->duracion }}"
+                                                                            data-supervisor="{{ strtoupper($usuario->supervisor) }}">
+                                                                        <i class="bi bi-eye"></i>
+                                                                    </button>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <button class="w-auto btn btn-primary" data-toggle="modal" data-target="#editUserModal"
+                                                                                data-id="{{ $usuario->id }}"
+                                                                                data-convenio="{{ $usuario->convenio_id }}"
                                                                                 data-documento="{{ $usuario->documento }}"
                                                                                 data-nombre="{{ strtoupper($usuario->nombre) }}"
-                                                                                data-programa="{{ ucfirst(strtolower($usuario->nombre_programa)) }}"
+                                                                                data-programa="{{ ucfirst(strtolower($usuario->programa_academico)) }}"
                                                                                 data-periodo="{{ $usuario->periodo_academico }}"
                                                                                 data-correo="{{ strtolower($usuario->correo_institucional) }}"
                                                                                 data-contacto="{{ $usuario->numero_telefono }}"
@@ -120,43 +153,26 @@
                                                                                 data-terminacion="{{ $usuario->fecha_terminacion }}"
                                                                                 data-duracion="{{ $usuario->duracion }}"
                                                                                 data-supervisor="{{ strtoupper($usuario->supervisor) }}">
-                                                                            <i class="bi bi-eye"></i>
+                                                                            <i class="bi bi-pencil-square"></i>
                                                                         </button>
-                                                                        </div>
-                                                                        <div class="col">
-                                                                            <button class="w-auto btn btn-primary" data-toggle="modal" data-target="#editUserModal"
-                                                                                    data-id="{{ $usuario->id }}"
-                                                                                    data-convenio="{{ $usuario->convenio_id }}"
-                                                                                    data-documento="{{ $usuario->documento }}"
-                                                                                    data-nombre="{{ strtoupper($usuario->nombre) }}"
-                                                                                    data-programa="{{ ucfirst(strtolower($usuario->programa_academico)) }}"
-                                                                                    data-periodo="{{ $usuario->periodo_academico }}"
-                                                                                    data-correo="{{ strtolower($usuario->correo_institucional) }}"
-                                                                                    data-contacto="{{ $usuario->numero_telefono }}"
-                                                                                    data-inicio="{{ $usuario->fecha_inicio }}"
-                                                                                    data-terminacion="{{ $usuario->fecha_terminacion }}"
-                                                                                    data-duracion="{{ $usuario->duracion }}"
-                                                                                    data-supervisor="{{ strtoupper($usuario->supervisor) }}">
-                                                                                <i class="bi bi-pencil-square"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                        <div class="col">
-                                                                            <form method="POST" action="{{ route('convenios.destroy_user_convenio') }}">
-                                                                                @csrf
-                                                                                <input type="hidden" name="user_id" id="user_id" value="{{ $usuario->id }}">
-                                                                                <input type="hidden" name="convenio_id" id="convenio_id" value="{{ $usuario->convenio_id }}">
-                                                                                <input type="hidden" name="nac_int" id="nac_int" value="{{ $usuario->nac_int }}">
-                                                                                <button class="btn btn-danger"><i class="bi bi-trash"></i></button>
-                                                                            </form>
-                                                                        </div>
                                                                     </div>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            @endif
-                                        </td>
+                                                                    <div class="col">
+                                                                        <form method="POST" action="{{ route('convenios.destroy_user_convenio') }}" onsubmit="confirmarEliminacion(event)">
+                                                                            @csrf
+                                                                            <input type="hidden" name="user_id" id="user_id" value="{{ $usuario->id }}">
+                                                                            <input type="hidden" name="convenio_id" id="convenio_id" value="{{ $usuario->convenio_id }}">
+                                                                            <input type="hidden" name="nac_int" id="nac_int" value="{{ $usuario->nac_int }}">
+                                                                            <button class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -263,8 +279,8 @@
                         <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required>
                     </div>
                     <div class="form-group">
-                        <label for="editTerminacion"><strong>Fecha de Terminacion:</strong></label>
-                        <input type="date" class="form-control" id="fecha_terminacion" name="fecha_terminacion" required>
+                        <label for="editTerminacion"><strong>Terminación (dejar vacío si tiene renovación automatica):</strong></label>
+                        <input type="date" class="form-control" id="fecha_terminacion" name="fecha_terminacion">
                     </div>
                     <div class="form-group">
                         <label for="duracion"><strong>Duración:</strong></label>
@@ -479,5 +495,15 @@
         modal.find('#type_duracion').val(arrayDuracion[1]);
         modal.find('#supervisor').val(supervisor);
     });
+
+    function confirmarEliminacion(event) {
+        // Mostrar un cuadro de confirmación
+        const confirmation = confirm("¿Estás seguro/a de que deseas eliminar este ítem?");
+        
+        // Si el usuario cancela, prevenir el envío del formulario
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
 </script>
 @endsection

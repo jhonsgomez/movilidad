@@ -1,5 +1,5 @@
 @extends('layouts.guest')
-@section('title', 'Actividades')
+@section('title', 'ORI UTS - Convenios Nacionales')
 
 @section('act_content')
 <div class="border border-2 rounded-3 shadow-lg mt-5 mb-5" style="width: 70%;background-color: white;">
@@ -12,7 +12,7 @@
         <div class="offset-1 col-10">
             <div class="card">
                 <div class="card-body ">
-                    <table id="queryTable"> 
+                    <table id="queryTable">
                         <thead>
                             <tr>
                                 <th scope="col">Código</th>
@@ -20,7 +20,7 @@
                                 <th scope="col">Institución o Entidad</th>
                                 <th scope="col">Ciudad</th>
                                 <th scope="col">Fecha de Inicio</th>
-                                <th scope="col">Vigencia</th> 
+                                <th scope="col">Vigencia</th>
                                 <th scope="col">Tipo</th>
                                 <th scope="col">Activo</th>
                                 <th scope="col">Breve Objeto: </th>
@@ -33,24 +33,40 @@
                             @foreach ($convNacs as $item)
                                 <tr>
                                     <td>{{ $item->codigo }}</td>
-                                    <td>{{ date_format(date_create($item->created_at), 'd-m-Y') }}</td>   
+                                    <td>{{ date_format(date_create($item->created_at), 'd-m-Y') }}</td>
                                     <td>{{ strtoupper($item->nombre) }}</td>
-                                    <td>{{ ucwords(strtolower($item->ciudad)) }}</td>
+                                    <td>
+                                        @if ($item->ciudad != '')
+                                            {{ ucwords(strtolower($item->ciudad)) }}
+                                        @else
+                                            {{ __('N/A') }}
+                                        @endif 
+                                    </td>
                                     <td>{{ $item->fechaInicio }}</td>
-                                    <td>{{ $item->vigencia }}</td>
+                                    <td>
+                                        @if ($item->vigencia != '')
+                                            {{ $item->vigencia }}
+                                        @else
+                                            {{ __('Renovación automática') }}
+                                        @endif                                     
+                                    </td>
                                     <td>{{ $item->tipo }}</td>
                                     <td>{{ $item->activo }}</td>
                                     <td>{{ ucfirst(strtolower($item->breve_objeto)) }}</td>
                                     <td>{{ ucfirst(strtolower($item->resultados_concretos)) }}</td>
                                     @if ($item->n_usuarios == 0)
-                                        <td>No Aplica</td>   
+                                        <td>No Aplica</td>
                                     @else 
                                         <td>{{ $item->n_usuarios }}</td>
-                                    @endif                            
+                                    @endif                                  
                                     <td> 
-                                        @foreach (explode(",", $item->docSoportes) as $file)
-                                            <br> - <a href="{{ url('/download_conv_nac', $file) }}">{{$file}}</a>
-                                        @endforeach 
+                                        @if ($item->docSoportes != '')
+                                            @foreach (explode(",", $item->docSoportes) as $file)
+                                                <br> - <a href="{{ url('/download_conv_nac', $file) }}">{{$file}}</a>
+                                            @endforeach
+                                        @else
+                                            {{ __('No hay documentación de soporte') }}
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

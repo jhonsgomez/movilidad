@@ -1,5 +1,5 @@
 @extends('layouts.inst_conv_mov')
-@section('title', 'Convenios Internacionales')
+@section('title', 'ORI UTS - Convenios Internacionales')
 
 @section('content')
 <div class="border border-2 rounded-3 shadow-lg bg-white" style="width: 75%;">
@@ -39,7 +39,13 @@
                                     <td> {{ strtoupper($item['convenio']->nombre) }} </td>
                                     <td> {{ ucfirst(strtolower($item['convenio']->pais)) }} </td>
                                     <td> {{ $item['convenio']->fechaInicio }} </td>
-                                    <td> {{ $item['convenio']->vigencia }} </td>
+                                    <td> 
+                                        @if ($item['convenio']->vigencia != '')
+                                            {{ $item['convenio']->vigencia }} 
+                                        @else
+                                            {{ __('Renovación automática') }}
+                                        @endif 
+                                    </td>
                                     <td> {{ $item['convenio']->tipo }} </td>
                                     <td> {{ $item['convenio']->activo }} </td>
                                     <td> {{ ucfirst(strtolower($item['convenio']->breve_objeto)) }} </td>
@@ -50,9 +56,13 @@
                                         <td> {{ $item['convenio']->n_usuarios }} </td>
                                     @endif                            
                                     <td> 
-                                        @foreach (explode(",", $item['convenio']->docSoportes) as $file)
-                                            <br> - <a href="{{ url('/download_conv_int', $file) }}">{{$file}}</a>
-                                        @endforeach 
+                                        @if ($item['convenio']->docSoportes != '')
+                                            @foreach (explode(",", $item['convenio']->docSoportes) as $file)
+                                                <br> - <a href="{{ url('/download_conv_int', $file) }}">{{$file}}</a>
+                                            @endforeach 
+                                        @else
+                                            {{ __('No hay documentación de soporte') }}
+                                        @endif
                                     </td>
                                     <td>
                                         <div class="row">
@@ -60,7 +70,7 @@
                                                 <a class="btn btn-primary  w-100" href="{{ route('convenios_int.edit', $item['convenio']->id) }}">Editar</a>
                                             </div>
                                             <div class="w-auto">
-                                                <form action="{{ route('convenio_int.destroy', $item['convenio']->id) }}" method="POST" class="form-delete">
+                                                <form action="{{ route('convenio_int.destroy', $item['convenio']->id) }}" method="POST" class="form-delete" onsubmit="confirmarEliminacion(event)">
                                                     @csrf
                                                     <button type="submit" class="btn btn-outline-danger w-100">Eliminar</button>
                                                 </form>
@@ -140,7 +150,7 @@
                                                                         </button>
                                                                     </div>
                                                                     <div class="col">
-                                                                        <form method="POST" action="{{ route('convenios.destroy_user_convenio') }}">
+                                                                        <form method="POST" action="{{ route('convenios.destroy_user_convenio') }}" onsubmit="confirmarEliminacion(event)">
                                                                             @csrf
                                                                             <input type="hidden" name="user_id" id="user_id" value="{{ $usuario->id }}">
                                                                             <input type="hidden" name="convenio_id" id="convenio_id" value="{{ $usuario->convenio_id }}">
@@ -261,8 +271,8 @@
                             <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required>
                         </div>
                         <div class="form-group">
-                            <label for="editTerminacion"><strong>Fecha de Terminacion:</strong></label>
-                            <input type="date" class="form-control" id="fecha_terminacion" name="fecha_terminacion" required>
+                            <label for="editTerminacion"><strong>Terminación (dejar vacío si tiene renovación automatica):</strong></label>
+                            <input type="date" class="form-control" id="fecha_terminacion" name="fecha_terminacion">
                         </div>
                         <div class="form-group">
                             <label for="duracion"><strong>Duración:</strong></label>
@@ -478,5 +488,15 @@
         modal.find('#type_duracion').val(arrayDuracion[1]);
         modal.find('#supervisor').val(supervisor);
     });
+
+    function confirmarEliminacion(event) {
+        // Mostrar un cuadro de confirmación
+        const confirmation = confirm("¿Estás seguro/a de que deseas eliminar este ítem?");
+        
+        // Si el usuario cancela, prevenir el envío del formulario
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
 </script>
 @endsection

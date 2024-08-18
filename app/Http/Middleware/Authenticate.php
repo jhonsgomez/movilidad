@@ -29,10 +29,10 @@ class Authenticate extends Middleware
                 // Obtener la fecha y hora actual
                 $currentDateTime = Carbon::now('America/Bogota');
 
-                $auditoria = new AuditoriaSesiones();
+                /*$auditoria = new AuditoriaSesiones();
                 $auditoria->usuario = $request->name;
                 $auditoria->fecha_hora = $currentDateTime;
-                $auditoria->save();
+                $auditoria->save();*/
 
                 // Crear la cookie con los datos del usuario
                 $userData = [

@@ -49,6 +49,7 @@ class LoginController extends Controller
         $type_convenio = $request->input('type_convenio');
 
         $request->session()->put('type_convenio', $request->input('type_convenio'));
+        $request->session()->put('nac_ext', $nacoInt);
 
 
         if ($about_what != ""  || $actions != "") {
@@ -73,13 +74,13 @@ class LoginController extends Controller
 
 
             } else if ($actions == "consultar" && $about_what == "movilidad" && $nacoInt == "nacional") {
-                return redirect('/activities/cons_movilidad_nac');
+                return redirect('/activities/movilidades');
             } else if ($actions == "consultar" && $about_what == "movilidad" && $nacoInt == "internacional") {
-                return redirect('/activities/cons_movilidad_int');
+                return redirect('/activities/movilidades');
             } else if ($actions == "registrar" && $about_what == "movilidad" && $nacoInt == "nacional") {
-                return redirect('/activities/create_movilidad_nac');
+                return redirect('/activities/movilidades/crear');
             } else if ($actions == "registrar" && $about_what == "movilidad" && $nacoInt == "internacional") {
-                return redirect('/activities/create_movilidad_int');
+                return redirect('/activities/movilidades/crear');
             }
         }
         

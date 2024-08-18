@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ConvenioAllUsuariosExport;
 use App\Models\ConvenioNac;
 use App\Models\ConvenioInt;
 
@@ -24,7 +25,6 @@ class ConvenioUsuariosController extends Controller
             'correo_institucional' => 'required',
             'numero_telefono' => 'required',
             'fecha_inicio' => 'required',
-            'fecha_terminacion' => 'required',
             'duracion' => 'required',
             'type_duracion' => 'required',
             'nac_int' => 'required',
@@ -48,7 +48,7 @@ class ConvenioUsuariosController extends Controller
 
         $usuario->save();
 
-        $convenio;
+        $convenio = null;
 
         if ($request->post('nac_int') == 0) $convenio = ConvenioNac::findOrFail($request->post('convenio_id'));
         else $convenio = ConvenioInt::findOrFail($request->post('convenio_id'));
@@ -120,7 +120,7 @@ class ConvenioUsuariosController extends Controller
         $usuario = ConvenioUsuarios::findOrFail($request->post('user_id'));
         $usuario->delete();
 
-        $convenio;
+        $convenio = null;
 
         if ($request->post('nac_int') == 0) $convenio = ConvenioNac::findOrFail($request->post('convenio_id'));
         else $convenio = ConvenioInt::findOrFail($request->post('convenio_id'));

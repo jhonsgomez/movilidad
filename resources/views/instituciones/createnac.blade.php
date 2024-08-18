@@ -1,5 +1,5 @@
 @extends('layouts.inst_conv_mov')
-@section('title', 'Registro Instituciones')
+@section('title', 'ORI UTS - Registro Instituciones')
 
 @section('content')
     <form method="POST" action="{{ route('instituciones.store_nac') }}" class="form-inst border border-2 rounded-3 shadow-lg" enctype="multipart/form-data">
@@ -59,7 +59,7 @@
         <div class="row mt-3">
             <div class="offset-1 col-10 ">
                 <input type="file" class="form-control border border-dark " multiple name="inst_docsoporteNac[]" id="inst_docsoporteNac">
-                <span for="">* Nota: Se debe ajuntar al menos el RUT y Certificado de existencia y representación legal.</span>
+                <span for="">* Nota: Se debe ajuntar al menos el RUT o certificado de existencia o representación legal.</span>
                 @error('inst_docsoporteNac')
                     <br><span style="color: red">* {{ $message }}</span>    
                 @enderror

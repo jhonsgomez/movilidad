@@ -1,5 +1,5 @@
 @extends('layouts.inst_conv_mov')
-@section('title', 'Edición Convenios')
+@section('title', 'ORI UTS - Edición Convenios')
 
 @section('content')
 <form method="POST" action="{{ route('convenios_int.update', $convs) }}" class="form-conv-nac border border-2 rounded-3 shadow-lg mt-5 mb-5"  enctype="multipart/form-data">
@@ -81,11 +81,15 @@
     </div>
     <div class="row mt-4">
         <div class="offset-1 col-10">
+            <label for="">* Activo:</label>
             <select class="form-select border border-dark" name="conv_activo" id="conv_activo">
-                <option selected value="">-- Activo --</option>
-                <option value="Sí" {{ $convs->activo == "Sí" ? "selected": '' }}>Sí</option>
+                <option selected value="">-- Seleccione una opción --</option>
+                <option value="Si" {{ $convs->activo == "Si" ? "selected": '' }}>Sí</option>
                 <option value="No" {{ $convs->activo == "No" ? "selected": '' }}>No</option>
             </select>
+            @error('conv_activo')
+                <span class="text-danger">*{{ $message }}</span>    
+            @enderror
         </div>
     </div> 
     <div class="row mt-4 mb-5">

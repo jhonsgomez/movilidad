@@ -1,5 +1,5 @@
 @extends('layouts.inst_conv_mov')
-@section('title', 'Registro Instituciones')
+@section('title', 'ORI UTS - Registro Instituciones')
 
 @section('content')  
     <form action="{{ route('instituciones.store_int') }}" method="POST" class="form-inst border border-2 rounded-3 shadow-lg ">

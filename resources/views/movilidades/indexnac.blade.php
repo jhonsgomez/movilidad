@@ -62,9 +62,13 @@
                                 <td>{{ date_format(date_create($movilidadConActividades['movilidad']->fecha_final), 'd-m-Y') }}</td>
                                 <td>{{ $movilidadConActividades['movilidad']->duracion }}</td>
                                 <td>
-                                    @foreach (explode(",", $movilidadConActividades['movilidad']->doc_soporte) as $file)
-                                            <br> - <a href="{{ url('/download_movilidad_nac', $file) }}">{{$file}}</a>
-                                    @endforeach
+                                    @if ($movilidadConActividades['movilidad']->doc_soporte != '')
+                                        @foreach (explode(",", $movilidadConActividades['movilidad']->doc_soporte) as $file)
+                                                <br> - <a href="{{ url('/download_movilidad_nac', $file) }}">{{$file}}</a>
+                                        @endforeach
+                                    @else
+                                        {{ __('No hay documentación de soporte') }}
+                                    @endif
                                 </td>
                                     <td>
                                         <div class="row mt-2">

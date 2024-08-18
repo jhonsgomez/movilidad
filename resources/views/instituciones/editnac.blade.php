@@ -1,5 +1,5 @@
 @extends('layouts.inst_conv_mov')
-@section('title', 'Registro Instituciones')
+@section('title', 'ORI UTS - Registro Instituciones')
 
 @section('content')
 <form method="POST" action="{{ route('institucion_nac.update', $instNac) }}" class="form-inst border border-2 rounded-3 shadow-lg">

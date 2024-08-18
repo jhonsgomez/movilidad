@@ -1,5 +1,5 @@
 @extends('layouts.inst_conv_mov')
-@section('title', 'Instituciones Internacionales')
+@section('title', 'ORI UTS - Instituciones Internacionales')
 
 @section('content')
 <div class="border border-2 rounded-3 shadow-lg bg-white" style="width: 75%;">
@@ -34,28 +34,62 @@
                                     <td> {{ date_format($item->created_at, "d-m-Y") }} </td>
                                     <td> {{ strtoupper($item->nombre) }} </td>
                                     <td> {{ ucwords(strtolower($item->pais)) }} </td>
-                                    <td> {{ ucwords(strtolower($item->ciudad)) }} </td>
-                                    <td> {{ $item->nit }} </td>
-                                    <td> {{ ucwords(strtolower($item->representante)) }} </td>
-                                    <td> {{ $item->telefono }} </td>
-                                    <td> {{ strtolower($item->email) }} </td>
-                                        <td>
-                                            <div class="row">
-                                                <div class="w-auto">
-                                                    <a class="btn btn-primary w-100" href="{{ route('institucion_int.edit', $item->id) }}">Editar</a>
-                                                </div>
-                                                <div class="w-auto">
-                                                    <form action="{{ route('institucion_int.destroy', $item->id) }}" method="POST" class="form-delete">
-                                                        @csrf    
-                                                        <button type="submit" class="btn btn-outline-danger w-100">Delete</button>
-                                                    </form>
-                                                </div>
+                                    <td>
+                                        @if ($item->ciudad != '')
+                                            {{ ucwords(strtolower($item->ciudad)) }}
+                                        @else
+                                            {{ __('N/A') }}
+                                        @endif                                     
+                                    </td>
+                                    <td>
+                                        @if ($item->nit != '')
+                                            {{ $item->nit }}
+                                        @else
+                                            {{ __('N/A') }}
+                                        @endif
+                                    </td>
+                                    <td>  
+                                        @if ($item->representante != '')
+                                            {{ strtoupper($item->representante) }}
+                                        @else
+                                            {{ __('N/A') }}
+                                        @endif
+                                    </td>
+                                    <td>  
+                                        @if ($item->telefono != '')
+                                            {{ $item->telefono }} 
+                                        @else
+                                            {{ __('N/A') }}
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($item->email != '')
+                                            {{ strtolower($item->email) }}    
+                                        @else
+                                            {{ __('N/A') }}
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="w-auto">
+                                                <a class="btn btn-primary w-100"
+                                                    href="{{ route('institucion_int.edit', $item->id) }}">Editar</a>
                                             </div>
-                                        </td>
+                                            <div class="w-auto">
+                                                <form action="{{ route('institucion_int.destroy', $item->id) }}"
+                                                    method="POST" class="form-delete"
+                                                    onsubmit="confirmarEliminacion(event)">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="btn btn-outline-danger w-100">Eliminar</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
-                    </table> 
+                    </table>
                 </div>
             </div>
         </div>
@@ -64,39 +98,53 @@
         <div class="offset-1 col-2">
             <a href="{{ route('login.activites') }}" class="btn btn-outline-success text-decoration-none">Regresar</a>
         </div>
-            <div class="offset-5 col-3">
-                <button type="button" class="btn btn-outline-dark w-100" data-toggle="modal" data-target="#exampleModalCenter">Generar Reportes  <i class="bi bi-file-earmark-spreadsheet-fill"></i></button>
-                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle">Reportes</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="{{ route('instEntInt.export') }}" >
+        <div class="offset-5 col-3">
+            <button type="button" class="btn btn-outline-dark w-100" data-toggle="modal"
+                data-target="#exampleModalCenter">Generar Reportes <i
+                    class="bi bi-file-earmark-spreadsheet-fill"></i></button>
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Reportes</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ route('instEntInt.export') }}">
                                 <div class="form-group mb-2">
                                     <label for="desde">Desde:</label>
-                                    <input type="date" class="form-control" name="instInt_initialDate" id="instInt_initialDate">
+                                    <input type="date" class="form-control" name="instInt_initialDate"
+                                        id="instInt_initialDate">
                                 </div>
                                 <div class="form-group mb-2">
                                     <label for="desde">Hasta:</label>
-                                    <input type="date" class="form-control" name="instInt_finalDate" id="instInt_finalDate" >
+                                    <input type="date" class="form-control" name="instInt_finalDate"
+                                        id="instInt_finalDate">
                                 </div>
                                 <span><b>Nota*:</b>Puede seleccionar 1 (Desde), ambas o ninguna fecha.</span>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cerrar</button>
-                                <button type="submit" class="btn btn-outline-success">Descargar</button>
-                                    </form>
-                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-outline-success">Descargar</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 </div>
-@endsection
 
+<script>
+    function confirmarEliminacion(event) {
+        const confirmation = confirm("¿Estás seguro/a de que deseas eliminar este ítem?");
+
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    }
+</script>
+@endsection

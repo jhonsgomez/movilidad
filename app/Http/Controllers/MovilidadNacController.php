@@ -65,8 +65,7 @@ class MovilidadNacController extends Controller
             'ent_sal' => 'required',
             'nac_ext' => 'required',
             'fecha_inicio' => 'required',
-            'fecha_final' => 'required',
-            'doc_soporte' => 'required'
+            'fecha_final' => 'required'
         ]);
 
         $files = [];

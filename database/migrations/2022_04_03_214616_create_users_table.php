@@ -22,11 +22,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password', 600);
             $table->tinyInteger('estado')->default(1);
-            $table->bigInteger('rol_id')->unsigned();
             $table->timestamps();
-
-            $table->foreign('rol_id')->references('id')->on('roles')
-                ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

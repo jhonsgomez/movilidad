@@ -20,6 +20,7 @@ use App\Models\InstitucionEntidadInt;
 use App\Http\Controllers\MovilidadNacController;
 use App\Http\Controllers\MovilidadIntController;
 use App\Http\Controllers\ActividadesController;
+use App\Http\Controllers\MovilidadController;
 
 // Login Routes
 Route::get('/', [LoginController::class, 'show'])->middleware('auth')->name('login.index');
@@ -116,121 +117,141 @@ Route::post('/activities/usuarios_convenio_destroy', [ConvenioUsuariosController
     ->name('convenios.destroy_user_convenio')->middleware('auth');
 
 Route::post('/activities/usuarios_convenio_report_nacs', [ConvenioUsuariosController::class, 'report_nacs'])
-    ->name('convenios.report_user_convenio_nacs')->middleware('auth');   
+    ->name('convenios.report_user_convenio_nacs')->middleware('auth');
 
 Route::post('/activities/usuarios_convenio_report_ints', [ConvenioUsuariosController::class, 'report_ints'])
-    ->name('convenios.report_user_convenio_ints')->middleware('auth'); 
+    ->name('convenios.report_user_convenio_ints')->middleware('auth');
 
 
 Route::get('/activities/movilidades/asistentes/{actividad_id}', [AsistentesActividadesController::class, 'index'])
-    ->name('movilidades.get_asistentes')->middleware('auth'); 
+    ->name('movilidades.get_asistentes')->middleware('auth');
 
 Route::post('/activities/movilidades/asistentes/new_one', [AsistentesActividadesController::class, 'store_one'])
-    ->name('movilidades.new_one_asistentes')->middleware('auth'); 
+    ->name('movilidades.new_one_asistentes')->middleware('auth');
 
 Route::post('/activities/movilidades/asistentes/new_many', [AsistentesActividadesController::class, 'store_many'])
-    ->name('movilidades.new_many_asistentes')->middleware('auth'); 
+    ->name('movilidades.new_many_asistentes')->middleware('auth');
 
 Route::put('/activities/movilidades/asistentes/update', [AsistentesActividadesController::class, 'update'])
-    ->name('movilidades.update_asistente')->middleware('auth'); 
+    ->name('movilidades.update_asistente')->middleware('auth');
 
 Route::post('/activities/movilidades/asistentes/delete', [AsistentesActividadesController::class, 'destroy'])
     ->name('movilidades.delete_asistentes')->middleware('auth');
-    
+
 Route::post('/activities/movilidades/asistentes/report', [AsistentesActividadesController::class, 'report'])
-    ->name('movilidades.report_asistentes')->middleware('auth'); 
+    ->name('movilidades.report_asistentes')->middleware('auth');
 
 Route::get('/download_asistentes_format/{file}', [AsistentesActividadesController::class, 'download']);
-   
+
 
 
 // Movilidades
-Route::get('/activities/create_movilidad_nac', [MovilidadNacController::class, 'create'])
-    ->name('movilidades_nac.create')->middleware('auth');
+Route::get('/activities/movilidades', [MovilidadController::class, 'list'])
+    ->name('movilidades.list')->middleware('auth');
 
-Route::post('/activities/create_movilidad_nac', [MovilidadNacController::class, 'store'])
-    ->name('movilidades_nac.store')->middleware('auth');
+Route::get('/activities/movilidades/crear', [MovilidadController::class, 'create'])
+    ->name('movilidades.create')->middleware('auth');
 
-Route::get('/activities/cons_movilidad_nac', [MovilidadNacController::class, 'index'])
-    ->name('movilidades_nac.index')->middleware('auth');
+Route::post('/activities/movilidades/crear', [MovilidadController::class, 'save'])
+    ->name('movilidades.save')->middleware('auth');
 
-Route::get('/activities/edit_movilidad_nac/{mov_id}', [MovilidadNacController::class, 'edit'])
-    ->name('movilidades_nac.edit')->middleware('auth');
+Route::get('/activities/movilidades/{movilidad_id}', [MovilidadController::class, 'edit'])
+    ->name('movilidades.edit')->middleware('auth');
 
-Route::put('/activities/edit_movilidad_nac/{mov_id}', [MovilidadNacController::class, 'update'])
-    ->name('movilidades_nac.update')->middleware('auth');
+Route::put('/activities/movilidades/{movilidad_id}', [MovilidadController::class, 'update'])
+    ->name('movilidades.update')->middleware('auth');
 
-Route::post('/activities/delete_movilidad_nac/{mov_id}', [MovilidadNacController::class, 'destroy'])
-    ->name('movilidades_nac.destroy')->middleware('auth');
+Route::post('/activities/movilidades/eliminar/{movilidad_id}', [MovilidadController::class, 'delete'])
+    ->name('movilidades.delete')->middleware('auth');
 
-Route::get('/download_movilidad_nac/{file}', [MovilidadNacController::class, 'download']);
+Route::get('/activities/movilidades/descargar/{file}', [MovilidadController::class, 'download'])
+    ->name('movilidades.download')->middleware('auth');
 
-Route::get('/reporte/movilidad_nac', [MovilidadNacController::class, 'exporting'])
-    ->name('movilidad_nac.export')->middleware('auth');
+Route::post('/activities/movilidades/reporte', [MovilidadController::class, 'export'])
+    ->name('movilidades.export')->middleware('auth');
 
-
-Route::get('/activities/create_movilidad_int', [MovilidadIntController::class, 'create'])
-    ->name('movilidades_int.create')->middleware('auth');
-
-Route::post('/activities/create_movilidad_int', [MovilidadIntController::class, 'store'])
-    ->name('movilidades_int.store')->middleware('auth');
-
-Route::get('/activities/cons_movilidad_int', [MovilidadIntController::class, 'index'])
-    ->name('movilidades_int.index')->middleware('auth');
-
-Route::get('/activities/edit_movilidad_int/{mov_id}', [MovilidadIntController::class, 'edit'])
-    ->name('movilidades_int.edit')->middleware('auth');
-
-Route::put('/activities/edit_movilidad_int/{mov_id}', [MovilidadIntController::class, 'update'])
-    ->name('movilidades_int.update')->middleware('auth');
-
-Route::post('/activities/delete_movilidad_int/{mov_id}', [MovilidadIntController::class, 'destroy'])
-    ->name('movilidades_int.destroy')->middleware('auth');
-
-Route::get('/download_movilidad_int/{file}', [MovilidadIntController::class, 'download']);
-
-Route::get('/reporte/movilidad_int', [MovilidadNacController::class, 'exporting'])
-    ->name('movilidad_int.export')->middleware('auth');
+// Route::post('/activities/create_movilidad_nac', [MovilidadNacController::class, 'store'])
+//     ->name('movilidades_nac.store')->middleware('auth');
 
 
 
-Route::get('/activities/create_actividad/{mov_id}', [ActividadesController::class, 'create'])
-    ->name('actividades.create')->middleware('auth');
+// Route::get('/activities/edit_movilidad_nac/{mov_id}', [MovilidadNacController::class, 'edit'])
+//     ->name('movilidades_nac.edit')->middleware('auth');
 
-Route::post('/activities/create_actividad/{mov_id}', [ActividadesController::class, 'store'])
-    ->name('actividades.store')->middleware('auth');
+// Route::put('/activities/edit_movilidad_nac/{mov_id}', [MovilidadNacController::class, 'update'])
+//     ->name('movilidades_nac.update')->middleware('auth');
 
-Route::get('/activities/details_actividad/{act_id}', [ActividadesController::class, 'details'])
-    ->name('actividades.details')->middleware('auth');
+// Route::post('/activities/delete_movilidad_nac/{mov_id}', [MovilidadNacController::class, 'destroy'])
+//     ->name('movilidades_nac.destroy')->middleware('auth');
 
-Route::get('/activities/edit_actividad/{act_id}', [ActividadesController::class, 'edit'])
-    ->name('actividades.edit')->middleware('auth');
+// Route::get('/download_movilidad_nac/{file}', [MovilidadNacController::class, 'download']);
 
-Route::put('/activities/edit_actividad/{act_id}', [ActividadesController::class, 'update'])
-    ->name('actividades.update')->middleware('auth');
-
-Route::post('/activities/delete_actividad/{act_id}', [ActividadesController::class, 'destroy'])
-    ->name('actividades.destroy')->middleware('auth');
-
-Route::get('/download_actividad/{file}', [ActividadesController::class, 'download']);
+// Route::get('/reporte/movilidad_nac', [MovilidadNacController::class, 'exporting'])
+//     ->name('movilidad_nac.export')->middleware('auth');
 
 
+// Route::get('/activities/create_movilidad_int', [MovilidadIntController::class, 'create'])
+//     ->name('movilidades_int.create')->middleware('auth');
+
+// Route::post('/activities/create_movilidad_int', [MovilidadIntController::class, 'store'])
+//     ->name('movilidades_int.store')->middleware('auth');
+
+// Route::get('/activities/cons_movilidad_int', [MovilidadIntController::class, 'index'])
+//     ->name('movilidades_int.index')->middleware('auth');
+
+// Route::get('/activities/edit_movilidad_int/{mov_id}', [MovilidadIntController::class, 'edit'])
+//     ->name('movilidades_int.edit')->middleware('auth');
+
+// Route::put('/activities/edit_movilidad_int/{mov_id}', [MovilidadIntController::class, 'update'])
+//     ->name('movilidades_int.update')->middleware('auth');
+
+// Route::post('/activities/delete_movilidad_int/{mov_id}', [MovilidadIntController::class, 'destroy'])
+//     ->name('movilidades_int.destroy')->middleware('auth');
+
+// Route::get('/download_movilidad_int/{file}', [MovilidadIntController::class, 'download']);
+
+// Route::get('/reporte/movilidad_int', [MovilidadNacController::class, 'exporting'])
+//     ->name('movilidad_int.export')->middleware('auth');
 
 
-// Entrante
-Route::get('/activities/cons_movilidad_int/entrante', [MovilidadIntEntController::class, 'index'])
-    ->name('movilidades_ent_int.index')->middleware('auth');
 
-Route::get('/activities/cons_movilidad_nac/entrante', [MovilidadNacEntController::class, 'index'])
-    ->name('movilidades_ent_nac.index')->middleware('auth');
+// Route::get('/activities/create_actividad/{mov_id}', [ActividadesController::class, 'create'])
+//     ->name('actividades.create')->middleware('auth');
 
-// Saliente
+// Route::post('/activities/create_actividad/{mov_id}', [ActividadesController::class, 'store'])
+//     ->name('actividades.store')->middleware('auth');
 
-Route::get('/activities/cons_movilidad_int/saliente', [MovilidadIntSalController::class, 'index'])
-    ->name('movilidades_sal_int.index')->middleware('auth');
+// Route::get('/activities/details_actividad/{act_id}', [ActividadesController::class, 'details'])
+//     ->name('actividades.details')->middleware('auth');
 
-Route::get('/activities/cons_movilidad_nac/saliente', [MovilidadNacSalController::class, 'index'])
-    ->name('movilidades_sal_nac.index')->middleware('auth');
+// Route::get('/activities/edit_actividad/{act_id}', [ActividadesController::class, 'edit'])
+//     ->name('actividades.edit')->middleware('auth');
+
+// Route::put('/activities/edit_actividad/{act_id}', [ActividadesController::class, 'update'])
+//     ->name('actividades.update')->middleware('auth');
+
+// Route::post('/activities/delete_actividad/{act_id}', [ActividadesController::class, 'destroy'])
+//     ->name('actividades.destroy')->middleware('auth');
+
+// Route::get('/download_actividad/{file}', [ActividadesController::class, 'download']);
+
+
+
+
+// // Entrante
+// Route::get('/activities/cons_movilidad_int/entrante', [MovilidadIntEntController::class, 'index'])
+//     ->name('movilidades_ent_int.index')->middleware('auth');
+
+// Route::get('/activities/cons_movilidad_nac/entrante', [MovilidadNacEntController::class, 'index'])
+//     ->name('movilidades_ent_nac.index')->middleware('auth');
+
+// // Saliente
+
+// Route::get('/activities/cons_movilidad_int/saliente', [MovilidadIntSalController::class, 'index'])
+//     ->name('movilidades_sal_int.index')->middleware('auth');
+
+// Route::get('/activities/cons_movilidad_nac/saliente', [MovilidadNacSalController::class, 'index'])
+//     ->name('movilidades_sal_nac.index')->middleware('auth');
 
 
 //Update
@@ -263,49 +284,49 @@ Route::put('/activities/convenio_nac/{conv_id}', [ConvenioNacController::class, 
 
 //movilidades
 //entrantes
-Route::get('/activities/movilidad_int/entrante/{mov_id}/edit', [MovilidadIntEntController::class, 'edit'])
-    ->name('movilidadIntEnt.edit')->middleware('auth');
+// Route::get('/activities/movilidad_int/entrante/{mov_id}/edit', [MovilidadIntEntController::class, 'edit'])
+//     ->name('movilidadIntEnt.edit')->middleware('auth');
 
-Route::put('/activities/movilidad_int/entrante/{mov_id}', [MovilidadIntEntController::class, 'update'])
-    ->name('movilidadIntEnt.update');
-
-
-
-Route::get('/activities/movilidad_int/saliente/{mov_id}/edit', [MovilidadIntSalController::class, 'edit'])
-    ->name('movilidadIntSal.edit')->middleware('auth');
-
-Route::put('/activities/movilidad_int/saliente/{mov_id}', [MovilidadIntSalController::class, 'update'])
-    ->name('movilidadIntSal.update')->middleware('auth');
-
-Route::get('/activities/movilidad_nac/entrante{mov_id}/edit', [MovilidadNacEntController::class, 'edit'])
-    ->name('movilidadNacEnt.edit')->middleware('auth');
-
-Route::put('/activities/movilidad_nac/entrante/{mov_id}', [MovilidadNacEntController::class, 'update'])
-    ->name('movilidadNacEnt.update')->middleware('auth');
+// Route::put('/activities/movilidad_int/entrante/{mov_id}', [MovilidadIntEntController::class, 'update'])
+//     ->name('movilidadIntEnt.update');
 
 
 
-Route::get('/activities/movilidad_nac/saliente{mov_id}/edit', [MovilidadNacSalController::class, 'edit'])
-    ->name('movilidadNacSal.edit')->middleware('auth');
+// Route::get('/activities/movilidad_int/saliente/{mov_id}/edit', [MovilidadIntSalController::class, 'edit'])
+//     ->name('movilidadIntSal.edit')->middleware('auth');
 
-Route::put('/activities/movilidad_nac/saliente/{mov_id}', [MovilidadNacSalController::class, 'update'])
-    ->name('movilidadNacSal.update')->middleware('auth');
+// Route::put('/activities/movilidad_int/saliente/{mov_id}', [MovilidadIntSalController::class, 'update'])
+//     ->name('movilidadIntSal.update')->middleware('auth');
+
+// Route::get('/activities/movilidad_nac/entrante{mov_id}/edit', [MovilidadNacEntController::class, 'edit'])
+//     ->name('movilidadNacEnt.edit')->middleware('auth');
+
+// Route::put('/activities/movilidad_nac/entrante/{mov_id}', [MovilidadNacEntController::class, 'update'])
+//     ->name('movilidadNacEnt.update')->middleware('auth');
+
+
+
+// Route::get('/activities/movilidad_nac/saliente{mov_id}/edit', [MovilidadNacSalController::class, 'edit'])
+//     ->name('movilidadNacSal.edit')->middleware('auth');
+
+// Route::put('/activities/movilidad_nac/saliente/{mov_id}', [MovilidadNacSalController::class, 'update'])
+//     ->name('movilidadNacSal.update')->middleware('auth');
 
 
 
 
-//delete movilidades
-Route::post('/delete_mov_int/entrante/{mov_id}', [MovilidadIntEntController::class, 'destroy'])
-    ->name('movilidadIntEnt.destroy')->middleware('auth');
+// //delete movilidades
+// Route::post('/delete_mov_int/entrante/{mov_id}', [MovilidadIntEntController::class, 'destroy'])
+//     ->name('movilidadIntEnt.destroy')->middleware('auth');
 
-Route::post('/delete_mov_int/saliente/{mov_id}', [MovilidadIntSalController::class, 'destroy'])
-    ->name('movilidadIntSal.destroy')->middleware('auth');
+// Route::post('/delete_mov_int/saliente/{mov_id}', [MovilidadIntSalController::class, 'destroy'])
+//     ->name('movilidadIntSal.destroy')->middleware('auth');
 
-Route::post('/delete_mov_nac/entrante/{mov_id}', [MovilidadNacEntController::class, 'destroy'])
-    ->name('movilidadNacEnt.destroy')->middleware('auth');
+// Route::post('/delete_mov_nac/entrante/{mov_id}', [MovilidadNacEntController::class, 'destroy'])
+//     ->name('movilidadNacEnt.destroy')->middleware('auth');
 
-Route::post('/delete_mov_nac/saliente/{mov_id}', [MovilidadNacSalController::class, 'destroy'])
-    ->name('movilidadNacSal.destroy')->middleware('auth');
+// Route::post('/delete_mov_nac/saliente/{mov_id}', [MovilidadNacSalController::class, 'destroy'])
+//     ->name('movilidadNacSal.destroy')->middleware('auth');
 
 // Delete
 // Instituciones

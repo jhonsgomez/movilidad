@@ -71,7 +71,7 @@
         </div>
         <div class="row mt-3">
             <div class="offset-1 col-10">
-                <label for="" class="mb-1">* Fecha de Vigencia:</label>
+                <label for="" class="mb-1">Vigencia (dejar vacío si tiene renovación automatica):</label>
                 <input type="date" class="form-control border border-dark" id="conv_vigencia" name="conv_vigencia" value="{{ old('conv_vigencia') }}">
                 @error('conv_vigencia')
                     <span class="text-danger">*{{ $message }}</span>    
@@ -162,8 +162,8 @@
                             <input type="date" class="form-control" id="start_date" placeholder="Fecha de inicio" required>
                         </div>
                         <div class="mb-3">
-                            <label for="end_date" class="form-label">* Fecha de terminación:</label>
-                            <input type="date" class="form-control" id="end_date" placeholder="Fecha de terminación" required>
+                            <label for="end_date" class="form-label">Terminación (dejar vacío si tiene renovación automatica):</label>
+                            <input type="date" class="form-control" id="end_date" placeholder="Fecha de terminación">
                         </div>
                         <div class="mb-3">
                             <label for="duracion" class="form-label">* Duración:</label>

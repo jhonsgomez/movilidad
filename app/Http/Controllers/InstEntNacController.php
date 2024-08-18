@@ -26,12 +26,11 @@ class InstEntNacController extends Controller
             'instentnameNac' => 'required',
             'dtpcitymunNac' => 'required',
             'emailNac' => 'required',
-            'representante' => 'required',
-            'inst_docsoporteNac' => 'required|array',
+            'representante' => 'required'
         ]);
 
-        // Guardar multiples archivos
-        // Para acceder a estos se debe utilizar explode (método inverso al implode)
+        $instentNact = new InstEntNac();
+
         $files = [];
         if ($request->hasFile('inst_docsoporteNac')) {
             foreach ($request->file('inst_docsoporteNac') as $file) {
@@ -39,16 +38,15 @@ class InstEntNacController extends Controller
                 $file->move(public_path('files/institucionesNac'), $name);
                 $files[] = $name;
             }
+            $instentNact->docSoportes = implode(",", $files);
         }
 
-        $instentNact = new InstEntNac();
         $instentNact->nombre = $request->post('instentnameNac');
         $instentNact->ciudad = $request->post('dtpcitymunNac');
         $instentNact->nit = $request->post('nitNac');
         $instentNact->representante = $request->post('representante');
         $instentNact->telefono = $request->post('telefonoNac');
         $instentNact->email = $request->post('emailNac');
-        $instentNact->docSoportes = implode(",", $files);
         $instentNact->user_id = auth()->user()->id;
         $instentNact->estado = 1;
 

@@ -2,6 +2,7 @@ $(document).ready(function () {
     $('#queryTable').DataTable({
         responsive: true,
         autoWidth: false,
+        pageLength: 5,
         "language": {
             "lengthMenu": "Mostrar " +
                 `   <select>
